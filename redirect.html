@@ -12,7 +12,7 @@
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
     const to = new URLSearchParams(window.location.search).get('to')
     const url = new URL(installPageLink)
-    // url.searchParams.set('to', to)
+    url.searchParams.set('to', to)
 
     const redirect = () => {
       window.location.href = url.toString()
@@ -20,7 +20,7 @@
 
     if (isIos) {
       window.location.href = to
-      setTimeout(redirect, 100)
+      // setTimeout(redirect, 100)
     } else {
       redirect()
     }
