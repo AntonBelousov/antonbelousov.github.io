@@ -6,28 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <title>Chattti</title>
   <script>
-    const installPageLink = 'https://chattti-df15ecb715cc10d1bd516acf9d7f7c7.webflow.io/install'
-    const appStoreLink = 'itms-apps://itunes.apple.com/app/id6446827017'
+    const installPageLink = 'https://chattti-df15ecb715cc10d1bd516acf9d7f7c7.webflow.io/install';
+    const appStoreLink = 'itms-apps://itunes.apple.com/app/id6446827017';
 
-    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
-    const to = new URLSearchParams(window.location.search).get('to')
-    const url = new URL(installPageLink)
-    url.searchParams.set('to', to)
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const to = new URLSearchParams(window.location.search).get('to');
+    const url = new URL(installPageLink);
+    url.searchParams.set('to', to);
 
-    const redirect = () => {
-      window.location.href = url.toString()
-    }
-
-    if (isIos) {
-      window.location.href = appStoreLink
-      setTimeout(redirect, 100)
-    } else {
-      redirect()
+    window.onload = function() {
+      document.getElementById('isIos').innerText = 'isIos: ' + isIos;
+      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
+      document.getElementById('url').innerText = 'url: ' + url.toString();
     }
   </script>
 </head>
 
 <body>
+  <div>
+    <p id="isIos"></p>
+    <p id="to"></p>
+    <p id="url"></p>
+  </div>
 </body>
 
 </html>
