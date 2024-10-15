@@ -37,4 +37,22 @@
       }
 
       document.getElementById('isIos').innerText = 'isIos: ' + isIos;
-      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter
+      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
+      document.getElementById('url').innerText = 'url: ' + url.toString();
+      document.getElementById('canOpenTo').innerText = 'Can open "to" link: ' + (toLinkResult.canOpen ? 'Yes' : 'No');
+      document.getElementById('error').innerText = 'Error: ' + (toLinkResult.error || 'No errors');
+    }
+  </script>
+</head>
+
+<body>
+  <div>
+    <p id="isIos"></p>
+    <p id="to"></p>
+    <p id="url"></p>
+    <p id="canOpenTo"></p>
+    <p id="error"></p>
+  </div>
+</body>
+
+</html>
