@@ -31,9 +31,9 @@
 
       // window.location = to;
       // !window.document.webkitHidden && setTimeout(function () {
-          setTimeout(function () {
-          window.location = appStoreLink;
-          }, 100);
+          // setTimeout(function () {
+          window.location.href = new URL(appStoreLink);
+          // }, 100);
       // }, 600);
     } else {
       redirect()
