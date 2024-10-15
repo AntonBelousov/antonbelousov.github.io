@@ -1,0 +1,15 @@
+{
+    "applinks": {
+      "details": [
+           {
+             "appIDs": [ "Y96K25U8R8.tech.escape-team.messenger" ],
+             "components": [
+               {
+                  "/": "/redirect",
+                  "comment": "redirect is an endpoint for contacts sharing via link"
+               }
+             ]
+           }
+       ]
+   }
+}
