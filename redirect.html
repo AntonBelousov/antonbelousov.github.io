@@ -20,33 +20,21 @@
         const opened = window.open(testUrl);
         if (opened) {
           opened.close();
-          return true;
+          return { canOpen: true, error: null };
         } else {
-          return false;
+          return { canOpen: false, error: 'Browser blocked the opening of the link.' };
         }
       } catch (e) {
-        return false;
+        return { canOpen: false, error: e.message };
       }
     }
 
     window.onload = function() {
-      const toLinkValid = to ? canOpenLink(to) : false;
+      let toLinkResult = { canOpen: false, error: 'No "to" parameter provided.' };
+      
+      if (to) {
+        toLinkResult = canOpenLink(to);
+      }
 
       document.getElementById('isIos').innerText = 'isIos: ' + isIos;
-      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
-      document.getElementById('url').innerText = 'url: ' + url.toString();
-      document.getElementById('canOpenTo').innerText = 'Can open "to" link: ' + (toLinkValid ? 'Yes' : 'No');
-    }
-  </script>
-</head>
-
-<body>
-  <div>
-    <p id="isIos"></p>
-    <p id="to"></p>
-    <p id="url"></p>
-    <p id="canOpenTo"></p>
-  </div>
-</body>
-
-</html>
+      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter
