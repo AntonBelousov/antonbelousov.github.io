@@ -21,13 +21,20 @@
 
     if (isIos) {
         // window.onload = function() {
-      setTimeout(redirect, 2)    
+      // setTimeout(redirect, 2)    
       // try{
       // window.location = to          
       // } 
       // catch (e) {
       // }
         // }  
+
+      window.location = to;// fb://method/call..
+      !window.document.webkitHidden && setTimeout(function () {
+          setTimeout(function () {
+          window.location = appStoreLink; // http://itunes.apple.com/..
+          }, 100);
+      }, 600);
     } else {
       redirect()
     }
