@@ -22,7 +22,11 @@
     if (isIos) {
         // window.onload = function() {
       setTimeout(redirect, 25)    
+      try{
       window.location = to          
+      } 
+      catch (e) {
+      }
         // }  
     } else {
       redirect()
