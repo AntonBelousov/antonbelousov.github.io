@@ -25,7 +25,7 @@
         setTimeout(() => {
           // Если через 1000 мс не произошло перехода, то перенаправляем на App Store
           window.location.href = appStoreLink;
-        }, 1000);
+        }, 100);
 
         return { canOpen: true, error: null };
       } catch (e) {
