@@ -6,48 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <title>Chattti</title>
   <script>
-    const installPageLink = 'https://chattti-df15ecb715cc10d1bd516acf9d7f7c7.webflow.io/install'
-    const appStoreLink = 'itms-apps://itunes.apple.com/app/id6446827017'
+    const installPageLink = 'https://chattti-df15ecb715cc10d1bd516acf9d7f7c7.webflow.io/install';
+    const appStoreLink = 'itms-apps://itunes.apple.com/app/id6446827017';
 
-    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
-    const to = new URLSearchParams(window.location.search).get('to')
-    const url = new URL(installPageLink)
-    url.searchParams.set('to', to)
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const to = new URLSearchParams(window.location.search).get('to');
+    const url = new URL(installPageLink);
+    url.searchParams.set('to', to);
 
-    const redirect = () => {
-      window.location.href = url.toString()
+    function redirectToTestUrlOrAppStore(link) {
+      try {
+        const testUrl = new URL(link);
+
+        // Попытка редиректа на testUrl
+        window.location.href = testUrl;
+
+        // Устанавливаем таймер на случай, если редирект не сработает
+        setTimeout(() => {
+          // Если через 1000 мс не произошло перехода, то перенаправляем на App Store
+          window.location.href = appStoreLink;
+        }, 1000);
+
+        return { canOpen: true, error: null };
+      } catch (e) {
+        // В случае ошибки сразу перенаправляем на App Store
+        window.location.href = appStoreLink;
+        return { canOpen: false, error: e.message };
+      }
     }
 
-    if (isIos) {
-        function canOpenLinkWithWindowLocation(link) {
-          try {
-            // Проверяем, является ли строка корректным URL
-            const testUrl = new URL(link);
-            
-            // Попытка перенаправления
-            window.location.href = testUrl;
-            
-            return { canOpen: true, error: null };
-          } catch (e) {
-            return { canOpen: false, error: e.message };
-          }
-        }
+    window.onload = function() {
+      let toLinkResult = { canOpen: false, error: 'No "to" parameter provided.' };
 
-      window.onload = function() {
-        let toLinkResult = { canOpen: false, error: 'No "to" parameter provided.' };
-        
-        if (to) {
-          toLinkResult = canOpenLinkWithWindowLocation(to);
-        }
-  
-        document.getElementById('isIos').innerText = 'isIos: ' + isIos;
-        document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
-        document.getElementById('url').innerText = 'url: ' + url.toString();
-        document.getElementById('canOpenTo').innerText = 'Can open "to" link: ' + (toLinkResult.canOpen ? 'Yes' : 'No');
-        document.getElementById('error').innerText = 'Error: ' + (toLinkResult.error || 'No errors');
+      if (to) {
+        toLinkResult = redirectToTestUrlOrAppStore(to);
       }
-    } else {
-      redirect()
+
+      document.getElementById('isIos').innerText = 'isIos: ' + isIos;
+      document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
+      document.getElementById('url').innerText = 'url: ' + url.toString();
+      document.getElementById('canOpenTo').innerText = 'Can open "to" link: ' + (toLinkResult.canOpen ? 'Yes' : 'No');
+      document.getElementById('error').innerText = 'Error: ' + (toLinkResult.error || 'No errors');
     }
   </script>
 </head>
