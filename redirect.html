@@ -15,8 +15,8 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      window.open(new URL(appStoreLink));
-      // window.location.href = new URL(appStoreLink)//url.toString()
+      // window.open(new URL(appStoreLink));
+      window.location = appStoreLink//url.toString()
     }
 
     if (isIos) {
