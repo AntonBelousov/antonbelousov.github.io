@@ -14,10 +14,28 @@
     const url = new URL(installPageLink);
     url.searchParams.set('to', to);
 
+    function canOpenLink(link) {
+      try {
+        const testUrl = new URL(link);
+        const opened = window.open(testUrl);
+        if (opened) {
+          opened.close();
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        return false;
+      }
+    }
+
     window.onload = function() {
+      const toLinkValid = to ? canOpenLink(to) : false;
+
       document.getElementById('isIos').innerText = 'isIos: ' + isIos;
       document.getElementById('to').innerText = 'to: ' + (to || 'no "to" parameter');
       document.getElementById('url').innerText = 'url: ' + url.toString();
+      document.getElementById('canOpenTo').innerText = 'Can open "to" link: ' + (toLinkValid ? 'Yes' : 'No');
     }
   </script>
 </head>
@@ -27,6 +45,7 @@
     <p id="isIos"></p>
     <p id="to"></p>
     <p id="url"></p>
+    <p id="canOpenTo"></p>
   </div>
 </body>
 
