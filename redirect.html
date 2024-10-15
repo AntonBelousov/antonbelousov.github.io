@@ -15,15 +15,14 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      // window.location.href = url.toString()
-      document.getElementById('output').innerText = '!Current URL: ' + window.location.href;
+      window.location.href = new URL(appStoreLink)//url.toString()
     }
 
     if (isIos) {
-        window.onload = function() {
+        // window.onload = function() {
           window.location.href = new URL(to)
-          setTimeout(redirect, 25)
-        }  
+          setTimeout(redirect, 100)
+        // }  
     } else {
       redirect()
     }
@@ -31,6 +30,6 @@
 </head>
 
 <body>
-  <div id="output"></div> <!-- Добавлен блок для вывода URL -->
 </body>
+
 </html>
