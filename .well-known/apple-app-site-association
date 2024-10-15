@@ -2,7 +2,7 @@
     "applinks": {
       "details": [
            {
-             "appIDs": [ "Y96K25U8R8.tech.escape-team.messenger" ],
+             "appIDs": [ "Y96K25U8R8.tech.escape-team.test-mess" ],
              "components": [
                {
                   "/": "/redirect",
