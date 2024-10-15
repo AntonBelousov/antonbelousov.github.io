@@ -15,7 +15,8 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      window.location.href = url.toString()
+      // window.location.href = url.toString()
+      document.getElementById('output').innerText = 'Current URL: ' + url.toString();
     }
 
     if (isIos) {
@@ -30,6 +31,6 @@
 </head>
 
 <body>
+  <div id="output"></div> <!-- Добавлен блок для вывода URL -->
 </body>
-
 </html>
