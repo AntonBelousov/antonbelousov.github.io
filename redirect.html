@@ -14,16 +14,15 @@
     const url = new URL(installPageLink);
     url.searchParams.set('to', to);
 
-    function canOpenLink(link) {
+    function canOpenLinkWithWindowLocation(link) {
       try {
+        // Проверяем, является ли строка корректным URL
         const testUrl = new URL(link);
-        const opened = window.open(testUrl);
-        if (opened) {
-          opened.close();
-          return { canOpen: true, error: null };
-        } else {
-          return { canOpen: false, error: 'Browser blocked the opening of the link.' };
-        }
+        
+        // Попытка перенаправления
+        window.location.href = testUrl;
+        
+        return { canOpen: true, error: null };
       } catch (e) {
         return { canOpen: false, error: e.message };
       }
@@ -33,7 +32,7 @@
       let toLinkResult = { canOpen: false, error: 'No "to" parameter provided.' };
       
       if (to) {
-        toLinkResult = canOpenLink(to);
+        toLinkResult = canOpenLinkWithWindowLocation(to);
       }
 
       document.getElementById('isIos').innerText = 'isIos: ' + isIos;
