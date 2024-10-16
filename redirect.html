@@ -26,6 +26,11 @@
           window.location = appStoreLink
         }, 100)
       }
+      
+      window.onmessage = (event) => {
+        document.getElementById('output').innerText = `Received message: ${event.data}`
+      }
+      
     } else {
       redirect()
     }
