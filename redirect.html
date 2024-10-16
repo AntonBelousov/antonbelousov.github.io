@@ -22,7 +22,7 @@
       // window.location.href = appStoreLink
       window.onload = () => {
         try {
-          window.location = appStoreLink
+          window.location = to
         } catch (e) {
            document.getElementById('output').innerText = 'Error: ' + e.message;
         }
