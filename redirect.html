@@ -22,15 +22,17 @@
       // window.location.href = appStoreLink
       window.onload = () => {
         window.location = to
-        setTimeout(() => {
-          window.location = appStoreLink
-        }, 100)
+        // setTimeout(() => {
+        //   window.location = appStoreLink
+        // }, 100)
       }
       
       window.onmessage = (event) => {
         document.getElementById('output').innerText = `Received message: ${event.data}`
       }
-      
+      window.onmessageerror = (event) => {
+        document.getElementById('output').innerText = `Received onmessageerror: ${event.data}`
+      }
     } else {
       redirect()
     }
