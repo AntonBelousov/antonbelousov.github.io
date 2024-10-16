@@ -15,19 +15,14 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      window.location.href = url.toString()
+      // window.location.href = url.toString()
+      window.location = to
     }
 
     if (isIos) {
       // window.location.href = appStoreLink
-      // setTimeout(redirect, 100)
-      window.onload = () => {
-        window.location.href = new URL(to)
-        setTimeout(() => {
-          window.location = appStoreLink
-        }, 100)
-      }
-    
+      window.location = appStoreLink
+      setTimeout(redirect, 100)
     } else {
       redirect()
     }
@@ -35,7 +30,6 @@
 </head>
 
 <body>
-  <h1>WAT</h1>
 </body>
 
 </html>
