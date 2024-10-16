@@ -23,7 +23,7 @@
         // window.location = to
         // setTimeout(redirect, 100)
         document.getElementById('output').innerText = navigator.userAgent
-
+        const userAgent = navigator.userAgent
         if !(/CriOS/).test(userAgent) &&
           !(/FxiOS/).test(userAgent) &&
           !(/OPT/).test(userAgent) &&
@@ -32,9 +32,9 @@
           !(/YaBrowser/).test(userAgent) && 
           !(/EdgiOS/).test(userAgent)
         {
-          document.getElementById('output').innerText = "is probably Safari"
+          document.getElementById('isSafari').innerText = "is probably Safari"
         } else {
-          document.getElementById('output').innerText = "is not Safari"
+          document.getElementById('isSafari').innerText = "is not Safari"
         }
         
         // setTimeout(() => {
