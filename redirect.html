@@ -15,14 +15,18 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      // window.location.href = url.toString()
-      window.location = to
+      window.location.href = url.toString()
     }
 
     if (isIos) {
       // window.location.href = appStoreLink
-      window.location = appStoreLink
-      setTimeout(redirect, 100)
+      // setTimeout(redirect, 100)
+      
+      window.location = to
+      setTimeout(() => {
+        window.location = appStoreLink
+      }, 100)
+
     } else {
       redirect()
     }
