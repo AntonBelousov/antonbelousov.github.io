@@ -7,7 +7,7 @@
   <title>Chattti</title>
   <script>
     const installPageLink = 'https://chattti-df15ecb715cc10d1bd516acf9d7f7c7.webflow.io/install'
-    const appStoreLink = 'https://itunes.apple.com/app/id6446827017'
+    const appStoreLink = 'itms-apps://itunes.apple.com/app/id6446827017'
 
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
     const to = new URLSearchParams(window.location.search).get('to')
@@ -15,26 +15,12 @@
     url.searchParams.set('to', to)
 
     const redirect = () => {
-      // window.open(new URL(appStoreLink));
-      window.location = appStoreLink//url.toString()
+      window.location = appStoreLink //url.toString()
     }
 
     if (isIos) {
-        // window.onload = function() {
-      // setTimeout(redirect, 2)    
-      // try{
-      // window.location = to          
-      // } 
-      // catch (e) {
-      // }
-        // }  
-
-      window.location = to;// fb://method/call..
-      !window.document.webkitHidden && setTimeout(function () {
-          setTimeout(function () {
-          window.location = appStoreLink; // http://itunes.apple.com/..
-          }, 100);
-      }, 600);
+      window.location = to
+      setTimeout(redirect, 100)
     } else {
       redirect()
     }
