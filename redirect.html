@@ -21,8 +21,10 @@
 
     if (isIos) {
       // window.location.href = appStoreLink
-      window.location = to
-      setTimeout(redirect, 100)
+      window.onload = () => {
+        window.location = to
+        // setTimeout(redirect, 100)
+      }
     } else {
       redirect()
     }
