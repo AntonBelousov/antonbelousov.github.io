@@ -22,7 +22,7 @@
       window.onload = () => {
         // window.location = to
         // setTimeout(redirect, 100)
-        document.getElementById('output').innerText = navigator.userAgent
+        // document.getElementById('output').innerText = navigator.userAgent
         const userAgent = navigator.userAgent
         if (
           (/CriOS/).test(userAgent) ||
@@ -35,12 +35,12 @@
           (/AlohaBrowser/).test(userAgent)
         ){
           // is not Safari
-          document.getElementById('isSafari').innerText = "is not Safari"
+          // document.getElementById('isSafari').innerText = "is not Safari"
           window.location = to
           setTimeout(redirect, 100)
         } else {
           // is probably Safari          
-          document.getElementById('isSafari').innerText = "is probably Safari"
+          // document.getElementById('isSafari').innerText = "is probably Safari"
           window.location = to
           setTimeout(() => {
             window.location = appStoreLink
@@ -54,7 +54,7 @@
 </head>
 
 <body>
-</body>
 <div id="output">11</div>
 <div id="isSafari">12</div>
+</body>
 </html>
