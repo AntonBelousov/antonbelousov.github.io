@@ -23,8 +23,9 @@
       window.onload = () => {
         try {
           window.location = to
+          document.getElementById('output').innerText = "WON'T SHOW ERROR"
         } catch (e) {
-           document.getElementById('output').innerText = 'Error: ' + e.message;
+          document.getElementById('output').innerText = 'Error: ' + e.message;
         }
         // window.location = to
         // setTimeout(() => {
