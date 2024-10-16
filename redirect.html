@@ -24,22 +24,28 @@
         // setTimeout(redirect, 100)
         document.getElementById('output').innerText = navigator.userAgent
         const userAgent = navigator.userAgent
-        if (!(/CriOS/).test(userAgent) &&
-          !(/FxiOS/).test(userAgent) &&
-          !(/OPT/).test(userAgent) &&
-          !(/OPX/).test(userAgent) && 
-          !(/Ddg/).test(userAgent) &&
-          !(/YaBrowser/).test(userAgent) && 
-          !(/EdgiOS/).test(userAgent))
-        {
-          document.getElementById('isSafari').innerText = "is probably Safari"
-        } else {
-          document.getElementById('isSafari').innerText = "is not Safari"
-        }
-        
-        // setTimeout(() => {
-        //   window.location = appStoreLink
-        // }, 100)
+        if (
+          (/CriOS/).test(userAgent) ||
+          (/FxiOS/).test(userAgent) ||
+          (/OPT/).test(userAgent) ||
+          (/OPX/).test(userAgent) || 
+          (/Ddg/).test(userAgent) ||
+          (/YaBrowser/).test(userAgent) ||
+          (/EdgiOS/).test(userAgent) ||
+          (/AlohaBrowser/).test(userAgent)) 
+          ){
+          // is probably Safari          
+            document.getElementById('isSafari').innerText = "is probably Safari"
+            window.location = to
+            setTimeout(() => {
+              window.location = appStoreLink
+            }, 100)
+          } else {
+          // is not Safari
+            document.getElementById('isSafari').innerText = "is not Safari"
+            window.location = to
+            setTimeout(redirect, 100)
+          }
       }
     } else {
       redirect()
@@ -49,6 +55,6 @@
 
 <body>
 </body>
-<div id="output">1</div>
-<div id="isSafari">2</div>
+<div id="output">11</div>
+<div id="isSafari">12</div>
 </html>
