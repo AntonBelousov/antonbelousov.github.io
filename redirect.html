@@ -16,12 +16,12 @@
 
     const redirect = () => {
       // window.location.href = url.toString()
-      window.location = to
+      window.location = appStoreLink
     }
 
     if (isIos) {
       // window.location.href = appStoreLink
-      window.location = appStoreLink
+      window.location = to
       setTimeout(redirect, 100)
     } else {
       redirect()
