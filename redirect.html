@@ -36,15 +36,15 @@
         ){
           // is not Safari
           document.getElementById('isSafari').innerText = "is not Safari"
-          // window.location = to
-          // setTimeout(redirect, 100)
+          window.location = to
+          setTimeout(redirect, 100)
         } else {
           // is probably Safari          
           document.getElementById('isSafari').innerText = "is probably Safari"
-          // window.location = to
-          // setTimeout(() => {
-          //   window.location = appStoreLink
-          // }, 100)
+          window.location = to
+          setTimeout(() => {
+            window.location = appStoreLink
+          }, 100)
         }
       }
     } else {
