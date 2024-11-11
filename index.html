@@ -2,10 +2,31 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Página de prueba<title>
+  <title>Página de prueba</title>
 </head>
 <body>
   <h1>Hola amiguitos!</h1>
+  
+  <!-- Добавленная кнопка -->
+  <button id="track-button">Click me!</button>
+
   <footer>gpuma 2017</footer>
+
+  <!-- Добавленный скрипт -->
+  <script>
+    // Функция для отправки запроса на сервер
+    function sendClickEvent(type) {
+      fetch(`https://novawera.com/lclick?type=${type}&source=${encodeURIComponent(window.location.href)}`)
+        .then(response => response.json())
+        .then(data => console.log(`Server response (type ${type}):`, data))
+        .catch(console.error);
+    }
+
+    // Отправка запроса при загрузке страницы (type = 1)
+    sendClickEvent(1);
+
+    // Привязка функции к клику на кнопку с id='track-button'
+    document.getElementById('track-button').addEventListener('click', () => sendClickEvent(2));
+  </script>
 </body>
 </html>
