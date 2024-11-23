@@ -9,12 +9,19 @@
   
   <!-- Добавленная кнопка -->
   <button id="track-button">Click me!</button>
+  
+  <button id="openAppButton">Open app</button>
 
+  <script>
+      const appUrl = "https://example.com";
+
+      document.getElementById("openAppButton").addEventListener("click", function () {
+          window.location.href = appUrl;
+      });  
+  </script>
   <footer>gpuma 2017</footer>
 
-  <!-- Добавленный скрипт -->
   <script>
-    // Функция для отправки запроса на сервер
     function sendClickEvent(type) {
       fetch(`https://novawera.com/lclick?type=${type}&source=${encodeURIComponent(window.location.href)}`)
         .then(response => response.json())
@@ -22,10 +29,8 @@
         .catch(console.error);
     }
 
-    // Отправка запроса при загрузке страницы (type = 1)
     sendClickEvent(1);
 
-    // Привязка функции к клику на кнопку с id='track-button'
     document.getElementById('track-button').addEventListener('click', () => sendClickEvent(2));
   </script>
 </body>
