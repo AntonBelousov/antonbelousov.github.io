@@ -8,8 +8,7 @@
   <h1>Hola amiguitos!</h1>
   
   <!-- Добавленная кнопка -->
-  <button id="track-button">Click me!</button>
-  
+  <button id="track-button">Track</button>
   <button id="openAppButton">Open app</button>
 
   <script>
@@ -22,16 +21,47 @@
   <footer>gpuma 2017</footer>
 
   <script>
-    function sendClickEvent(type) {
-      fetch(`https://novawera.com/lclick?type=${type}&source=${encodeURIComponent(window.location.href)}`)
-        .then(response => response.json())
-        .then(data => console.log(`Server response (type ${type}):`, data))
-        .catch(console.error);
-    }
-
-    sendClickEvent(1);
-
-    document.getElementById('track-button').addEventListener('click', () => sendClickEvent(2));
+      // Функция для генерации строкового ID
+      function generateStringId() {
+        return 'xxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+    
+      // Функция для работы с куки
+      function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+      }
+    
+      function getCookie(name) {
+        const matches = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+        return matches ? decodeURIComponent(matches[1]) : null;
+      }
+    
+      // Убедимся, что строковый ID установлен в куки
+      const COOKIE_NAME = 'string_id';
+      let stringId = getCookie(COOKIE_NAME);
+    
+      if (!stringId) {
+        stringId = generateStringId();
+        setCookie(COOKIE_NAME, stringId, 365); // Сохраняем ID на 1 год
+        console.log(`Generated new string_id: ${stringId}`); // Логирование нового ID
+      } else {
+        console.log(`Using existing string_id from cookies: ${stringId}`); // Логирование существующего ID
+      }
+    
+      // Функция для отправки кликов
+      function sendClickEvent(type) {
+        console.log(`Sending click event with string_id: ${stringId}, type: ${type}`); // Логирование ID и типа клика
+        fetch(`https://novawera.com/lclick?type=${type}&source=${encodeURIComponent(window.location.href)}&id=${stringId}`)
+          .then(response => response.json())
+          .then(data => console.log(`Server response (type ${type}):`, data))
+          .catch(console.error);
+      }
   </script>
 </body>
 </html>
