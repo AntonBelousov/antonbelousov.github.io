@@ -122,17 +122,19 @@
         }
 
         .cta-button {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-top: 20px;
-            padding: 15px 30px;
             font-size: 1.2em;
             font-weight: bold;
             color: #fff;
             background-color: #1a73e8;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             text-decoration: none;
             width: 450px;
+            height: 48px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -143,9 +145,9 @@
 
         @media (max-width: 570px) {
             .cta-button {
-                width: calc(100% - 40px);
-                margin-left: 20px;
-                margin-right: 20px;
+                width: calc(100% - 20px);
+                margin-left: 10px;
+                margin-right: 10px;
             }
             .left,
             .right {
@@ -242,3 +244,4 @@
     </script>
 </body>
 </html>
+
