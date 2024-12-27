@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycle Cleaner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .app-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .description {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .user-trust {
+            font-size: 3em;
+            font-weight: bold;
+            color: #1a73e8;
+        }
+
+        .review-carousel {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .review {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review .stars {
+            color: #f5c518;
+            font-size: 1.2em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background-color: #1558b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="icon.png" alt="Cycle Cleaner Logo" style="width: 100px;">
+        <h1 class="app-title">Cycle Cleaner</h1>
+        <p class="description">Clean your phone storage in one tap</p>
+        <p class="user-trust">1M USERS TRUST</p>
+
+        <div class="review-carousel">
+            <div class="review">
+                <p class="stars">★★★★★</p>
+                <p><strong>Marion Nash</strong></p>
+                <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+            </div>
+            <div class="review">
+                <p class="stars">★★★★★</p>
+                <p><strong>Marion Nash</strong></p>
+                <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+            </div>
+            <div class="review">
+                <p class="stars">★★★★★</p>
+                <p><strong>Marion Nash</strong></p>
+                <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+            </div>
+        </div>
+
+        <a href="#" class="cta-button">Get For Free</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.review-carousel').slick({
+                dots: true,
+                infinite: true,
+                speed: 500,
+                slidesToShow: 1,
+                adaptiveHeight: true
+            });
+        });
+    </script>
+</body>
+</html>
