@@ -8,8 +8,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
     <style>
+
+        @font-face {
+            font-family: 'Sailec-Medium';
+            src: url('/res/Sailec-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Sailec-Bold';
+            src: url('/res/Sailec-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Sailec-Medium";
             margin: 0;
             padding: 0;
             text-align: center;
@@ -35,11 +50,6 @@
 
         .left,
         .right {
-/*             width: 50px;
-            height: 50px; */
-/*             border: 2px solid #1a73e8;
-            border-radius: 50%; */
-/*             background-color: #f0f0f0; */
         }
 
         .center-stack {
@@ -123,7 +133,8 @@
         }
 
         .cta-button {
-            display: flex;
+            padding-top: 4px;  /* adjustment */
+            display: flex;            
             align-items: center;
             justify-content: center;
             margin-top: 50px;
