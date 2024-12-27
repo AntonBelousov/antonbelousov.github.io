@@ -26,39 +26,39 @@
             margin: 10px 0;
         }
 
+        .outer-stack {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .left,
+        .right {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #1a73e8;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+        }
+
+        .center-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
         .description {
             font-size: 1.2em;
-            margin: 10px 0;
+            margin: 0;
         }
 
         .user-trust {
             font-size: 3em;
             font-weight: bold;
             color: #1a73e8;
-            position: relative;
-        }
-
-        .user-trust .decorations {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .user-trust .decorations img {
-            position: relative;
-            width: 50px;
-            border: 2px solid #1a73e8;
-            border-radius: 50%;
-            margin: 0 10px;
-        }
-
-        .user-trust .decorations .left {
-            left: -60px;
-        }
-
-        .user-trust .decorations .right {
-            right: -60px;
+            margin: 0;
         }
 
         .review-carousel {
@@ -137,29 +137,30 @@
         .cta-button:hover {
             background-color: #1558b0;
         }
+
         @media (max-width: 570px) {
-            .user-trust .decorations {
+            .left,
+            .right {
                 display: none;
             }
+
             .review-carousel {
                 width: 100%;
-                margin: 0px auto;
-                padding: 0 0px;
+                margin: 0 auto;
+                padding: 0;
             }
-        }}
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="icon.svg" alt="Cycle Cleaner Logo" style="width: 100px;">
-        <h1 class="app-title">Cycle Cleaner</h1>
-        <p class="description">Clean your phone storage in one tap</p>
-        <div class="user-trust">
-            1M USERS TRUST
-            <div class="decorations">
-                <img src="decoration.left.svg" alt="Decoration Left" class="left">
-                <img src="decoration.right.svg" alt="Decoration Right" class="right">
+        <div class="outer-stack">
+            <img src="decoration.left.svg" alt="Decoration Left" class="left">
+            <div class="center-stack">
+                <p class="description">Clean your phone storage in one tap</p>
+                <div class="user-trust">1M USERS TRUST</div>
             </div>
+            <img src="decoration.right.svg" alt="Decoration Right" class="right">
         </div>
 
         <div class="review-carousel">
