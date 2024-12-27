@@ -17,6 +17,7 @@
 
         .container {
             padding: 20px;
+            position: relative;
         }
 
         .app-title {
@@ -34,6 +35,27 @@
             font-size: 3em;
             font-weight: bold;
             color: #1a73e8;
+            position: relative;
+        }
+
+        .user-trust .decorations {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+        }
+
+        .user-trust .decorations img {
+            position: absolute;
+            width: 50px;
+        }
+
+        .user-trust .decorations .left {
+            left: -60px;
+        }
+
+        .user-trust .decorations .right {
+            right: -60px;
         }
 
         .review-carousel {
@@ -43,14 +65,37 @@
 
         .review {
             padding: 20px;
+            max-width: 150px;
+            margin: 0 auto;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .review .stars {
-            color: #f5c518;
-            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .review .stars img {
+            width: 20px;
+        }
+
+        .slick-dots li button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ddd;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .slick-dots li.slick-active button {
+            width: 30px;
+            height: 10px;
+            border-radius: 10px;
+            background-color: #1a73e8;
         }
 
         .cta-button {
@@ -76,21 +121,48 @@
         <img src="images/icon.svg" alt="Cycle Cleaner Logo" style="width: 100px;">
         <h1 class="app-title">Cycle Cleaner</h1>
         <p class="description">Clean your phone storage in one tap</p>
-        <p class="user-trust">1M USERS TRUST</p>
+        <div class="user-trust">
+            1M USERS TRUST
+            <div class="decorations">
+                <img src="images/decoration.left.svg" alt="Decoration Left" class="left">
+                <img src="images/decoration.right.svg" alt="Decoration Right" class="right">
+            </div>
+        </div>
 
         <div class="review-carousel">
-            <div class="review">
-                <p class="stars">★★★★★</p>
+            <div class="review" id="review1">
+                <div class="stars">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                </div>
+                <img src="images/av1.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
                 <p><strong>Marion Nash</strong></p>
                 <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
             </div>
-            <div class="review">
-                <p class="stars">★★★★★</p>
+            <div class="review" id="review2">
+                <div class="stars">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                </div>
+                <img src="images/av2.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
                 <p><strong>Marion Nash</strong></p>
                 <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
             </div>
-            <div class="review">
-                <p class="stars">★★★★★</p>
+            <div class="review" id="review3">
+                <div class="stars">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                    <img src="images/star.svg" alt="Star">
+                </div>
+                <img src="images/av3.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
                 <p><strong>Marion Nash</strong></p>
                 <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
             </div>
@@ -106,9 +178,22 @@
             $('.review-carousel').slick({
                 dots: true,
                 infinite: true,
-                speed: 500,
+                speed: 300,
                 slidesToShow: 1,
-                adaptiveHeight: true
+                adaptiveHeight: true,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+
+            $(window).on('resize', function(){
+                $('.review-carousel').slick('setPosition');
             });
         });
     </script>
