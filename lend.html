@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="/images/">
+    <base href="/res/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cycle Cleaner</title>
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Sailec-Medium';
             margin: 0;
             padding: 0;
             text-align: center;
@@ -78,6 +78,8 @@
             box-shadow: 0 6px 30px 0 rgba(6, 95, 239, 0.1);
             box-sizing: border-box;
             margin: 0;
+            font-family: 'Sailec-Medium';
+            font-size: 16px;
         }
 
         .review .stars {
@@ -124,8 +126,9 @@
             align-items: center;
             justify-content: center;
             margin-top: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Sailec-Medium';
             color: #fff;
             background-color: #1a73e8;
             border: none;
@@ -159,6 +162,19 @@
                 padding: 0;
             }
         }
+        .reviewer-name {
+            font-family: 'Sailec-Medium';
+            font-size: 18px;
+        }
+        .large-text {
+            font-family: 'Sailec-Medium';
+            font-size: 140px;
+        }
+
+        .small-text {
+            font-family: 'Sailec-Medium';
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
@@ -169,7 +185,10 @@
             <img src="decoration.left.svg" alt="Decoration Left" class="left">
             <div class="center-stack">
                 <p class="description">Clean your phone storage in one tap</p>
-                <div class="user-trust">1M USERS TRUST</div>
+                <div class="user-trust">
+                    <span class="large-text">1M</span>
+                    <span class="small-text">User trust</span>
+                </div>
             </div>
             <img src="decoration.right.svg" alt="Decoration Right" class="right">
         </div>
@@ -185,7 +204,7 @@
                         <img src="star.svg" alt="Star"/>
                     </div>
                     <img src="av1.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p><strong>Marion Nash</strong></p>
+                    <p class="reviewer-name">Marion Nash</p>
                     <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
                 </div>
             </div>
@@ -199,7 +218,7 @@
                         <img src="star.svg" alt="Star"/>
                     </div>
                     <img src="av2.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p><strong>Marion Nash</strong></p>
+                    <p class="reviewer-name">Marion Nash</p>
                     <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
                 </div>
             </div>
@@ -213,7 +232,7 @@
                         <img src="star.svg" alt="Star"/>
                     </div>
                     <img src="av3.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p><strong>Marion Nash</strong></p>
+                    <p class="reviewer-name">Marion Nash</p>
                     <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
                 </div>
             </div>
