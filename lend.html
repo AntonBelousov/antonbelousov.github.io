@@ -62,14 +62,12 @@
         }
 
         .review-carousel {
-            width: 510px;
+            width: 470px;
             margin: 20px auto;
-            overflow: visible; 
         }
 
         .review-container {
-            padding: 30px 30px; /* Отступ между контейнерами */
-            overflow: visible; 
+            padding: 10px; /* Отступ между контейнерами */
         }
 
         .review {
@@ -231,12 +229,12 @@
             $('.review-carousel').slick({
                 dots: true,
                 infinite: false,
+                arrows: false, /* Убираем кнопки навигации */
                 speed: 300,
                 slidesToShow: 1,
                 centerMode: false,
                 initialSlide: 1, // Start with the second review
-                adaptiveHeight: true
-            });
+                adaptiveHeight: true);
 
             $(window).on('resize', function(){
                 $('.review-carousel').slick('setPosition');
@@ -245,4 +243,3 @@
     </script>
 </body>
 </html>
-
