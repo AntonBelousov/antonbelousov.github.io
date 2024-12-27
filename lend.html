@@ -31,14 +31,15 @@
         }
 
         .container {
-            padding: 20px;
+            padding-top: 50px;
         }
 
         .app-title {
-            font-size: 2em;
+            font-size: 28px;
             font-weight: bold;
             margin: 10px 0;
             color: #065FEF;
+            margin-bottom: 5px;
         }
 
         .outer-stack {
@@ -46,15 +47,11 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
+            margin-top: 50px;
         }
 
         .left,
         .right {
-/*             width: 50px;
-            height: 50px; */
-/*             border: 2px solid #1a73e8;
-            border-radius: 50%; */
-/*             background-color: #f0f0f0; */
         }
 
         .center-stack {
@@ -65,15 +62,17 @@
         }
 
         .description {
-            font-size: 1.2em;
+            font-weight: medium;
+            font-size: 20px;
             margin: 0;
             color:  #333E63;
+            margin-top: -60px;
         }
 
         .user-trust {
-            font-size: 3em;
-            font-weight: bold;
-            color: #1a73e8;
+            font-size: 24px;
+            font-weight: medium;
+            color: #333E63;
             margin: 0;
         }
 
@@ -142,7 +141,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 50px;
+            margin-top: -15px;
             font-size: 18px;
             font-weight: medium;
             color: #fff;
@@ -161,10 +160,6 @@
             background-color: #1558b0;
         }
 
-        .user-trust {
-            font-weight: bold;
-            color: #333E63;
-        }
         .reviewer-name {
             font-weight: medium;
             font-size: 18px;
@@ -202,9 +197,9 @@
                 margin-top: 10px;
             }
             .cta-button {
-                width: calc(100% - 20px);
-                margin-left: 10px;
-                margin-right: 10px;
+                width: calc(100% - 40px);
+                margin-left: 20px;
+                margin-right: 20px;
             }
             .left,
             .right {
@@ -220,6 +215,12 @@
                 text-align: center;
                 margin: 0 auto; /* Центрирует элемент в контейнере */
                 display: block; /* Убедитесь, что элемент занимает всю ширину */
+            }
+            .description {
+                margin-top: -30px;
+            }
+            .review-container {
+                padding: 30px 20px; /* Отступ между контейнерами */
             }
         }
 
@@ -263,6 +264,9 @@
             font-size: 24px;
             color: #333E63;
             display: block;
+        }
+        .slick-dots {
+            bottom: 10px; 
         }
 
 </style>
