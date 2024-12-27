@@ -17,7 +17,6 @@
 
         .container {
             padding: 20px;
-            position: relative;
         }
 
         .app-title {
@@ -59,17 +58,19 @@
         }
 
         .review-carousel {
-            width: 80%;
+            width: 450px;
             margin: 20px auto;
         }
 
         .review {
             padding: 20px;
-            max-width: 150px;
-            margin: 0 auto;
+            width: 450px;
+            max-width: 100%;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            margin: 0 auto;
         }
 
         .review .stars {
@@ -82,20 +83,35 @@
             width: 20px;
         }
 
-        .slick-dots li button {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ddd;
-            border: none;
-            transition: all 0.3s ease;
+        .slick-dots {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .slick-dots li.slick-active button {
+        .slick-dots li {
+            margin: 0;
+        }
+
+        .slick-dots li button {
+            display: none;
+        }
+
+        .slick-dots li.slick-active {
             width: 30px;
             height: 10px;
             border-radius: 10px;
             background-color: #1a73e8;
+        }
+
+        .slick-dots li {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ddd;
+            transition: all 0.3s ease;
         }
 
         .cta-button {
@@ -177,19 +193,12 @@
         $(document).ready(function(){
             $('.review-carousel').slick({
                 dots: true,
-                infinite: true,
+                infinite: false,
                 speed: 300,
                 slidesToShow: 1,
-                adaptiveHeight: true,
-                responsive: [
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1
-                        }
-                    }
-                ]
+                centerMode: false,
+                initialSlide: 1, // Start with the second review
+                adaptiveHeight: true
             });
 
             $(window).on('resize', function(){
