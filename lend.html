@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
     <style>
         body {
-            font-family: 'Sailec-Medium';
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             text-align: center;
@@ -52,6 +52,7 @@
         .description {
             font-size: 1.2em;
             margin: 0;
+            color:  #333E63;
         }
 
         .user-trust {
@@ -62,24 +63,24 @@
         }
 
         .review-carousel {
-            width: 470px;
+            width: 510px;
             margin: 20px auto;
+            overflow: visible; 
         }
 
         .review-container {
-            padding: 10px; /* Отступ между контейнерами */
+            padding: 30px 30px; /* Отступ между контейнерами */
+            overflow: visible; 
         }
 
         .review {
             padding: 20px;
             max-width: 100%;
             background-color: #fff;
-            border-radius: 10px;
+            border-radius: 16px;
             box-shadow: 0 6px 30px 0 rgba(6, 95, 239, 0.1);
             box-sizing: border-box;
             margin: 0;
-            font-family: 'Sailec-Medium';
-            font-size: 16px;
         }
 
         .review .stars {
@@ -127,8 +128,8 @@
             justify-content: center;
             margin-top: 50px;
             font-size: 18px;
-            font-weight: 500;
             font-family: 'Sailec-Medium';
+            font-weight: bold;
             color: #fff;
             background-color: #1a73e8;
             border: none;
@@ -143,6 +144,32 @@
 
         .cta-button:hover {
             background-color: #1558b0;
+        }
+
+        .user-trust {
+            font-family: 'Sailec-Bold';
+            color: #333E63;
+        }
+        .reviewer-name {
+            font-family: 'Sailec-Medium';
+            font-size: 18px;
+        }
+        .large-text {
+            font-family: 'Sailec-Medium';
+            font-size: 140px;
+            color:  #333E63;
+        }
+
+        .small-text {
+            font-family: 'Sailec-Medium';
+            font-size: 24px;
+            color:  #333E63;
+        }
+        .reviewer-name {
+            font-family: 'Sailec-Medium';
+            font-size: 18px;
+            color: #A0A9B6;
+            margin-right: auto;
         }
 
         @media (max-width: 570px) {
@@ -162,19 +189,34 @@
                 padding: 0;
             }
         }
-        .reviewer-name {
-            font-family: 'Sailec-Medium';
-            font-size: 18px;
-        }
-        .large-text {
-            font-family: 'Sailec-Medium';
-            font-size: 140px;
+
+        .avatar {
+            width: 40px;
+            border-radius: 50%;
+            margin: 10px;
         }
 
-        .small-text {
-            font-family: 'Sailec-Medium';
-            font-size: 24px;
+        .top-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+        .bottom-row {
+            font-family: 'Sailec-Medium';
+            font-size: 16px;
+            color: #333E63;
+            margin: 10px;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .top-row .stars {
+            display: flex;
+            gap: 5px;
+            margin: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -185,58 +227,67 @@
             <img src="decoration.left.svg" alt="Decoration Left" class="left">
             <div class="center-stack">
                 <p class="description">Clean your phone storage in one tap</p>
-                <div class="user-trust">
-                    <span class="large-text">1M</span>
-                    <span class="small-text">User trust</span>
-                </div>
+                <div class="user-trust">1M USERS TRUST</div>
             </div>
             <img src="decoration.right.svg" alt="Decoration Right" class="right">
         </div>
 
         <div class="review-carousel">
             <div class="review-container">
-                <div class="review" id="review1">
-                    <div class="stars">
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                    </div>
-                    <img src="av1.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p class="reviewer-name">Marion Nash</p>
-                    <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
-                </div>
-            </div>
-            <div class="review-container">
-                <div class="review" id="review2">
-                    <div class="stars">
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                    </div>
-                    <img src="av2.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p class="reviewer-name">Marion Nash</p>
-                    <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
-                </div>
-            </div>
-            <div class="review-container">
-                <div class="review" id="review3">
-                    <div class="stars">
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                        <img src="star.svg" alt="Star"/>
-                    </div>
-                    <img src="av3.png" alt="Avatar" style="width: 50px; border-radius: 50%; margin: 10px auto;">
-                    <p class="reviewer-name">Marion Nash</p>
-                    <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
-                </div>
-            </div>
-        </div>
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="av3.png" class="avatar"/>
+                       <span class="reviewer-name">Marion Nash</span>
+                       <div class="stars">
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+                   </div>
+               </div>
+           </div>
+           <div class="review-container">
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="av3.png" class="avatar"/>
+                       <span class="reviewer-name">Marion Nash</span>
+                       <div class="stars">
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+                   </div>
+               </div>
+           </div>
+           <div class="review-container">
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="av3.png" class="avatar"/>
+                       <span class="reviewer-name">Marion Nash</span>
+                       <div class="stars">
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                           <img src="star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+                   </div>
+               </div>
+           </div>
+       </div>
 
         <a href="#" class="cta-button">Get For Free</a>
     </div>
@@ -248,12 +299,12 @@
             $('.review-carousel').slick({
                 dots: true,
                 infinite: false,
-                arrows: false, /* Убираем кнопки навигации */
                 speed: 300,
                 slidesToShow: 1,
                 centerMode: false,
                 initialSlide: 1, // Start with the second review
-                adaptiveHeight: true);
+                adaptiveHeight: true
+            });
 
             $(window).on('resize', function(){
                 $('.review-carousel').slick('setPosition');
@@ -262,3 +313,4 @@
     </script>
 </body>
 </html>
+
