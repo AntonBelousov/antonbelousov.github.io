@@ -42,6 +42,12 @@
             margin-bottom: 5px;
         }
 
+        .app-logo {
+            width: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
         .outer-stack {
             display: flex;
             justify-content: center;
@@ -85,7 +91,7 @@
         }
 
         .review-container {
-            padding: 30px 30px; /* Отступ между контейнерами */
+            padding: 30px 30px; 
             overflow: visible; 
         }
 
@@ -103,7 +109,7 @@
             display: flex;
             justify-content: center;
             gap: 5px;
-            margin-top: 15px; /* Отступ сверху */
+            margin-top: 15px; 
         }
 
         .review .stars img {
@@ -184,48 +190,6 @@
             margin-right: auto;
         }
 
-        @media (max-width: 570px) {
-            body {
-                min-width: 320px;
-            }
-            .top-row {
-                flex-direction: column;
-                align-items: center;
-                gap: 5px; /* Расстояние между строками */
-            }
-
-            .stars {
-                justify-content: center;
-                margin-top: 10px;
-            }
-            .cta-button {
-                width: calc(100% - 40px);
-                margin-left: 20px;
-                margin-right: 20px;
-            }
-            .left,
-            .right {
-                display: none;
-            }
-
-            .review-carousel {
-                width: 100%;
-                margin: 0 auto;
-                padding: 0;
-            }
-            .reviewer-name {
-                text-align: center;
-                margin: 0 auto; /* Центрирует элемент в контейнере */
-                display: block; /* Убедитесь, что элемент занимает всю ширину */
-            }
-            .description {
-                margin-top: -30px;
-            }
-            .review-container {
-                padding: 30px 20px; /* Отступ между контейнерами */
-            }
-        }
-
         .avatar {
             width: 40px;
             border-radius: 50%;
@@ -271,22 +235,111 @@
             bottom: 10px; 
         }
 
+        @media (max-width: 570px) {
+            body {
+                min-width: 320px;
+            }
+            .top-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .stars {
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .cta-button {
+                width: calc(100% - 40px);
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+            .left,
+            .right {
+                display: none;
+            }
+
+            .review-carousel {
+                width: 100%;
+                margin: 0 auto;
+                padding: 0;
+            }
+            .reviewer-name {
+                text-align: center;
+                margin: 0 auto; 
+                display: block; 
+            }
+            .description {
+                margin-top: 0px;
+            }
+            .review-container {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-height: 870px) {
+            .container {
+                padding-top: clamp(0.625rem, -6.3315rem + 17.3913vh, 3.125rem); /* 10 - 50 */ 
+                padding-bottom: clamp(0.625rem, -6.3315rem + 17.3913vh, 3.125rem); /* 10 - 50 */ 
+            }
+            .app-logo {
+                width: clamp(1.875rem, -3.3424rem + 13.0435vh, 3.75rem); /* 30 - 60 */
+                height: auto; 
+            }
+
+            .user-trust-large {
+                font-size: clamp(3.125rem, -12.5272rem + 39.1304vh, 8.75rem); /* 50 - 140 */
+            }
+
+            .user-trust-small {
+                font-size: clamp(1rem, -0.3913rem + 3.4783vh, 1.5rem); /* 16 - 24 */
+            }
+            .app-title {
+                font-size: clamp(1.25rem, -0.1413rem + 3.4783vh, 1.75rem); /* 20 - 28*/
+            }
+            .description {
+                
+                font-size: clamp(1rem, 0.3043rem + 1.7391vh, 1.25rem); /* 16 - 20 */
+            }
+            .review {
+                padding: clamp(0.3125rem, -2.2962rem + 6.5217vh, 1.25rem); /* 10 - 20 */
+            }
+            .review-carousel {
+                margin-top:  clamp(-1.25rem, -8.2065rem + 17.3913vh, 1.25rem);
+            }
+            
+            .cta-button {
+                margin-top: clamp(-1.5625rem, -3.3016rem + 4.3478vh, -0.9375rem);
+            }
+            .outer-stack {
+                margin-top: clamp(0rem, -8.6957rem + 21.7391vw, 3.125rem);
+            }
+
+            .review .stars {
+                margin-top: 0px;
+            }
+            .bottom-row {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        }
+
 </style>
 </head>
 <body>
     <div class="container">
-        <img src="icon.svg" alt="Cycle Cleaner Logo" style="width: 100px;">
+        <img src="icon.svg" class="app-logo">
         <h1 class="app-title">Cycle Cleaner</h1>
         <div class="outer-stack">
-            <img src="decoration.left.svg" alt="Decoration Left" class="left">
+            <img src="decoration.left.svg" class="left">
             <div class="center-stack">
                 <p class="description">Clean your phone storage in one tap</p>
                 <div class="user-trust">
-    <span class="user-trust-large">1M</span>
-    <span class="user-trust-small">USERS TRUST</span>
-</div>
+                    <span class="user-trust-large">1M</span>
+                    <span class="user-trust-small">USERS TRUST</span>
+                </div>
             </div>
-            <img src="decoration.right.svg" alt="Decoration Right" class="right">
+            <img src="decoration.right.svg" class="right">
         </div>
 
         <div class="review-carousel">
@@ -304,7 +357,7 @@
                        </div>
                    </div>
                    <div class="bottom-row">
-                       <p>So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.</p>
+                       So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.
                    </div>
                </div>
            </div>
@@ -322,7 +375,7 @@
                        </div>
                    </div>
                    <div class="bottom-row">
-                       <p>So I got this app no ads it's really good it cleaned my storage really awesome</p>
+                       So I got this app no ads it's really good it cleaned my storage really awesome
                    </div>
                </div>
            </div>
@@ -340,7 +393,7 @@
                        </div>
                    </div>
                    <div class="bottom-row">
-                       <p>Great to have good security. Download was very fast. I feel much secured now.</p>
+                       Great to have good security. Download was very fast. I feel much secured now.
                    </div>
                </div>
            </div>
@@ -375,4 +428,3 @@
     </script>
 </body>
 </html>
-
