@@ -2,7 +2,7 @@
     "applinks": {
       "details": [
            {
-             "appIDs": [ ""75ATA3LFPL.k.BranchTest"" ],
+             "appIDs": [ "75ATA3LFPL.k.BranchTest" ],
              "components": [
                {
                   "/": "/redirect",
