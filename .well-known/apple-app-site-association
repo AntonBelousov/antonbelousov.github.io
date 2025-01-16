@@ -7,7 +7,7 @@
         ],
         "components": [
           {
-            "/": "/login/change-password/*",
+            "/": "/*",
             "comment": "redirect is an endpoint for password recovery"
           }
         ]
