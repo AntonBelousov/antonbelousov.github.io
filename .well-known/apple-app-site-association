@@ -1,15 +1,17 @@
 {
-    "applinks": {
-      "details": [
-           {
-             "appIDs": [ "75ATA3LFPL.k.BranchTest" ],
-             "components": [
-               {
-                  "/": "/redirect",
-                  "comment": "redirect is an endpoint for contacts sharing via link"
-               }
-             ]
-           }
-       ]
-   }
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "2KKGXY59CU.com.reluna.client.ios"
+        ],
+        "components": [
+          {
+            "/": "/login/change-password/",
+            "comment": "redirect is an endpoint for password recovery"
+          }
+        ]
+      }
+    ]
+  }
 }
