@@ -1,195 +1,472 @@
-<html>
-  <head>
-    <meta
-      name="facebook-domain-verification"
-      content="tgluvrzimwl8z81f3cfzv8nhvdy56c"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--     <meta http-equiv="refresh" content="0;url=https://721cp.app.link/ZfAVyDKI0Pb?%243p=a_facebook&~ad_id={{ad.id}}&~ad_name={{ad.name}}&~ad_set_id={{adset.id}}&~ad_set_name={{adset.name}}&~campaign={{campaign.name}}&~campaign_id={{campaign.id}}&click_id={subid}"> -->
+    <title>Cycle Cleaner</title>
     <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js"
-      );
-      fbq("init", "200341044967992");
-      fbq("track", "PageView");
+        // Load Branch
+        (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener banner closeBanner closeJourney data deepview deepviewCta first init link logout removeListener setBranchViewData setIdentity track trackCommerceEvent logEvent disableTracking getBrowserFingerprintId crossPlatformIds lastAttributedTouchData setAPIResponseCallback qrCode setRequestMetaData setAPIUrl getAPIUrl setDMAParamsForEEA".split(" "), 0);
+        
+        var options = { no_journeys: true };
+        branch.init('key_live_ltbyaM4fyj3USQOzOwNyXoflBFjJ3YrJ', options, function(err, data) {
+            console.log(err, data);
+        })
+
     </script>
+
+    <script>
+        function getParameterByName(name) {
+          const url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+          const results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+        
+        function handleButtonClick() {
+          const token = getParameterByName('_token');
+          const url = `https://afilator.com/?_1p=18&_token=${encodeURIComponent(token)}`;
+          window.location.href = url;
+        }
+    </script>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
     <style>
-      html {
-        height: 100%;
-        width: 100%;
-      }
-      .btn {
-        display: inline-block;
-        font-weight: 400;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 0.375rem 0.75rem;
-        font-size: 1.5em;
-        line-height: 1.5;
-        border-radius: 0.25rem;
-        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-          border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        padding: 10px 50px;
-        border-radius: 17px;
-      }
-      #body {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-family: "AvenirNext", "Verdana", Arial, sans-serif;
-      }
 
-      img {
-        width: 100px;
-        height: 100px;
-        border-radius: 20px;
-        box-shadow: 1px 1px 3px 0 #000;
-      }
-
-      h1 {
-        margin-top: 15px;
-        margin-bottom: 5px;
-      }
-      #desc {
-        margin-top: 10px;
-        margin-bottom: 45px;
-        font-size: 20px;
-      }
-    </style>
-  </head>
-  <body id="body">
-    <div
-      style="display: none; cursor: pointer"
-      id="main"
-      onclick="redirectToAppStore()"
-    >
-      <img src="1024x1024bcleanup.jpeg" alt="" />
-      <h1>Cleanup</h1>
-      <p id="desc">iPhone Storage Cleaner</p>
-      <button
-        class="btn"
-        style="background-color: #157dec; color: white; cursor: pointer"
-        onclick="redirectToAppStore()"
-      >
-        TRY FOR FREE
-      </button>
-    </div>
-    <script>
-      const art = "17wjxb19";
-      async function stall(stallTime = 1000) {
-        await new Promise((resolve) => setTimeout(resolve, stallTime));
-      }
-
-      function getParameterByName(name, url = window.location.href) {
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return "";
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-      }
-
-      function readCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(";");
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == " ") c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0)
-            return c.substring(nameEQ.length, c.length);
+         @font-face {
+            font-family: 'Sailec-Medium';
+            src: url('res/Sailec-Medium.otf') format('opentype');
+            font-weight: medium;
+            font-style: normal;
         }
-        return null;
-      }
 
-      function waitForCookie(cookieName, timeout = 1500) {
-        return new Promise(function (resolve, reject) {
-          const startTime = new Date().getTime();
-          const checkCookie = () => {
-            const fbpCookie = readCookie(cookieName);
-            if (fbpCookie) {
-              clearInterval(interval);
-              resolve(fbpCookie);
-            } else if (new Date().getTime() - startTime >= timeout) {
-              clearInterval(interval);
-              resolve(null);
+        @font-face {
+            font-family: 'Sailec-Bold';
+            src: url('res/Sailec-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        body {
+            font-family: "Sailec-Medium";
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            padding-top: 50px;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #065FEF;
+            margin-bottom: 5px;
+        }
+
+        .app-logo {
+            width: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .outer-stack {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .left,
+        .right {
+        }
+
+        .center-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .description {
+            font-weight: medium;
+            font-size: 20px;
+            
+            margin-left: 20px;
+            margin-right: 20px;
+            color:  #333E63;
+            margin-top: -60px;
+        }
+
+        .user-trust {
+            font-size: 24px;
+            font-weight: medium;
+            color: #333E63;
+            margin: 0;
+        }
+
+        .review-carousel {
+            width: 510px;
+            margin: 20px auto;
+            overflow: visible; 
+        }
+
+        .review-container {
+            padding: 30px 30px; 
+            overflow: visible; 
+        }
+
+        .review {
+            padding: 20px;
+            max-width: 100%;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 30px 0 rgba(6, 95, 239, 0.1);
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .review .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 15px; 
+        }
+
+        .review .stars img {
+            width: 20px;
+        }
+
+        .slick-dots {
+            display: flex !important;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .slick-dots li {
+            margin: 0;
+        }
+
+        .slick-dots li button {
+            display: none;
+        }
+
+        .slick-dots li.slick-active {
+            width: 24px;
+            height: 6px;
+            border-radius: 10px;
+            background-color: #065FEF;
+        }
+
+        .slick-dots li {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #DBE7FB;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -15px;
+            font-size: 18px;
+            font-weight: medium;
+            color: #fff;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            width: 450px;
+            height: 48px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 15px 15px 0 rgba(42, 130, 240, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: #1558b0;
+        }
+
+        .reviewer-name {
+            font-weight: medium;
+            font-size: 18px;
+        }
+        .large-text {
+            font-weight: medium;
+            font-size: 140px;
+            color:  #333E63;
+        }
+
+        .small-text {
+            font-weight: medium;
+            font-size: 24px;
+            color:  #333E63;
+        }
+        .reviewer-name {
+            font-weight: medium;
+            font-size: 18px;
+            color: #A0A9B6;
+            margin-right: auto;
+        }
+
+        .avatar {
+            width: 40px;
+            border-radius: 50%;
+            margin: 10px;
+        }
+
+        .top-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bottom-row {
+            font-weight: medium;
+            font-size: 16px;
+            color: #333E63;
+            margin: 10px;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .top-row .stars {
+            display: flex;
+            gap: 5px;
+            margin: 10px;
+        }
+
+        .user-trust-large {
+            font-weight: bold;
+            font-size: 140px;
+            color: #333E63;
+            display: block;
+      
+        }
+
+        .user-trust-small {
+            font-weight: medium;
+            font-size: 24px;
+            color: #333E63;
+            display: block;
+        }
+        .slick-dots {
+            bottom: 10px; 
+        }
+
+        @media (max-width: 570px) {
+            body {
+                min-width: 320px;
             }
-          };
+            .top-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
 
-          const interval = setInterval(checkCookie, 100); // Check every 100 milliseconds
+            .stars {
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .cta-button {
+                width: calc(100% - 40px);
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+            .left,
+            .right {
+                display: none;
+            }
+
+            .review-carousel {
+                width: 100%;
+                margin: 0 auto;
+                padding: 0;
+            }
+            .reviewer-name {
+                text-align: center;
+                margin: 0 auto; 
+                display: block; 
+            }
+            .description {
+                margin-top: 0px;
+            }
+            .review-container {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-height: 870px) {
+            .container {
+                padding-top: clamp(0.625rem, -6.3315rem + 17.3913vh, 3.125rem); /* 10 - 50 */ 
+                padding-bottom: clamp(0.625rem, -6.3315rem + 17.3913vh, 3.125rem); /* 10 - 50 */ 
+            }
+            .app-logo {
+                width: clamp(1.875rem, -3.3424rem + 13.0435vh, 3.75rem); /* 30 - 60 */
+                height: auto; 
+            }
+
+            .user-trust-large {
+                font-size: clamp(3.125rem, -12.5272rem + 39.1304vh, 8.75rem); /* 50 - 140 */
+            }
+
+            .user-trust-small {
+                font-size: clamp(1rem, -0.3913rem + 3.4783vh, 1.5rem); /* 16 - 24 */
+            }
+            .app-title {
+                font-size: clamp(1.25rem, -0.1413rem + 3.4783vh, 1.75rem); /* 20 - 28*/
+            }
+            .description {
+                
+                font-size: clamp(1rem, 0.3043rem + 1.7391vh, 1.25rem); /* 16 - 20 */
+            }
+            .review {
+                padding: clamp(0.3125rem, -2.2962rem + 6.5217vh, 1.25rem); /* 10 - 20 */
+            }
+            .review-carousel {
+                margin-top:  clamp(-1.25rem, -8.2065rem + 17.3913vh, 1.25rem);
+            }
+            
+            .cta-button {
+                margin-top: clamp(-1.5625rem, -3.3016rem + 4.3478vh, -0.9375rem);
+            }
+            .outer-stack {
+                margin-top: clamp(0rem, -8.6957rem + 21.7391vw, 3.125rem);
+            }
+
+            .review .stars {
+                margin-top: 0px;
+            }
+            .bottom-row {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        }
+
+</style>
+<!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '922542819859149');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=922542819859149&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body>
+    <div class="container">
+        <img src="res/icon.svg" class="app-logo">
+        <h1 class="app-title">Cycle Cleaner</h1>
+        <div class="outer-stack">
+            <img src="res/decoration.left.svg" class="left">
+            <div class="center-stack">
+                <p class="description">Clean your phone storage in one tap</p>
+                <div class="user-trust">
+                    <span class="user-trust-large">1M</span>
+                    <span class="user-trust-small">USERS TRUST</span>
+                </div>
+            </div>
+            <img src="res/decoration.right.svg" class="right">
+        </div>
+
+        <div class="review-carousel">
+            <div class="review-container">
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="res/av1.png" class="avatar"/>
+                       <span class="reviewer-name">Marion Nash</span>
+                       <div class="stars">
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       So fantastic! With this app, a large amount of trash was removed from my phone, which is now as fast as new.
+                   </div>
+               </div>
+           </div>
+           <div class="review-container">
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="res/av2.png" class="avatar"/>
+                       <span class="reviewer-name">Marshmellowheart29</span>
+                       <div class="stars">
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       So I got this app no ads it's really good it cleaned my storage really awesome
+                   </div>
+               </div>
+           </div>
+           <div class="review-container">
+               <div class="review" id="review3">
+                   <div class="top-row">
+                       <img src="res/av3.png" class="avatar"/>
+                       <span class="reviewer-name">Ardishay</span>
+                       <div class="stars">
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                           <img src="res/star.svg"/>
+                       </div>
+                   </div>
+                   <div class="bottom-row">
+                       Great to have good security. Download was very fast. I feel much secured now.
+                   </div>
+               </div>
+           </div>
+       </div>
+
+        <a class="cta-button" onclick="redirectToAppStore()">Get For Free</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.review-carousel').slick({
+                dots: true,
+                infinite: false,
+                speed: 300,
+                slidesToShow: 1,
+                centerMode: false,
+                initialSlide: 1, // Start with the second review
+                adaptiveHeight: true
+            });
+
+            $(window).on('resize', function(){
+                $('.review-carousel').slick('setPosition');
+            });
         });
-      }
-
-      async function redirectToAppStore() {
-        const cname = getParameterByName("cname");
-        const cid = getParameterByName("cid");
-        const aname = getParameterByName("aname");
-        const aid = getParameterByName("aid");
-        const crname = getParameterByName("crname");
-        const crid = getParameterByName("crid");
-        const redirect_ios = getParameterByName("redirect_ios");
-
-        var img = document.createElement("img");
-        var trackingUrl = `https://view.adjust/impression/${art}?campaign=${cname}%20%28${cid}%29&adgroup=${aname}%20%28${aid}%29&creative=${crname}%20%28${crid}%29`;
-        img.src = trackingUrl;
-        img.style.width = "1px";
-        img.style.height = "1px";
-        img.style.opacity = 0.001;
-        document.body.appendChild(img);
-
-        var redirectUrl = `https://app.adjust.com/${art}?campaign=${cname}%20%28${cid}%29&adgroup=${aname}%20%28${aid}%29&creative=${crname}%20%28${crid}%29`;
-        if (redirect_ios && redirect_ios.length > 0) {
-          redirectUrl += `&redirect_ios=${redirect_ios}`;
-        }
-        try {
-          const fbpid = await waitForCookie("_fbp");
-          const fbclid = await waitForCookie("_fbc");
-          window.location.href = `${redirectUrl}&fbclid=${fbclid}&fbpid=${fbpid}`;
-        } catch (error) {
-          console.error(error);
-          window.location.href = redirectUrl;
-        }
-      }
-
-      redirectToAppStore();
-
-      setTimeout(() => {
-        document.getElementById("main").style.display = "inline-block";
-      }, 5000);
     </script>
-
-    <noscript>
-      <a href="https://app.adjust.com/17wjxb19" style="font-size: 64px"
-        >Go to app</a
-      >
-    </noscript>
-  </body>
+</body>
 </html>
