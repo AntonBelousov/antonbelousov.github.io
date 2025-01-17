@@ -29,10 +29,10 @@
         }
         
         function handleButtonClick() {
-          const token = getParameterByName('_token');
-          const url = `https://afilator.com/?_1p=18&_token=${encodeURIComponent(token)}`;
+            const queryString = window.location.search.substring(1);
+            const url = `https://afilator.com/?_lp=1&${queryString}`;
             console.log(url);
-            window.location.href = url;
+            // window.location.href = url;
         }
 
         handleButtonClick();
