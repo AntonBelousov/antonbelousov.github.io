@@ -33,6 +33,8 @@
           const url = `https://afilator.com/?_1p=18&_token=${encodeURIComponent(token)}`;
           window.location.href = url;
         }
+
+        handleButtonClick();
     </script>
   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
@@ -446,7 +448,7 @@
            </div>
        </div>
 
-        <a class="cta-button" onclick="redirectToAppStore()">Get For Free</a>
+        <a class="cta-button" onclick="handleButtonClick()">Get For Free</a>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
