@@ -1,67 +1,195 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Página de prueba</title>
-</head>
-<body>
-  <h1>Hola amiguitos!</h1>
-  
-  <!-- Добавленная кнопка -->
-  <button id="track-button">Track</button>
-  <button id="openAppButton">Open app</button>
+  <head>
+    <meta
+      name="facebook-domain-verification"
+      content="tgluvrzimwl8z81f3cfzv8nhvdy56c"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        "script",
+        "https://connect.facebook.net/en_US/fbevents.js"
+      );
+      fbq("init", "200341044967992");
+      fbq("track", "PageView");
+    </script>
+    <style>
+      html {
+        height: 100%;
+        width: 100%;
+      }
+      .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 0.375rem 0.75rem;
+        font-size: 1.5em;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        padding: 10px 50px;
+        border-radius: 17px;
+      }
+      #body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-family: "AvenirNext", "Verdana", Arial, sans-serif;
+      }
 
-  <script>
-      const appUrl = "wios://click";
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        box-shadow: 1px 1px 3px 0 #000;
+      }
 
-      document.getElementById("openAppButton").addEventListener("click", function () {
-          window.location.href = appUrl;
-      });  
-  </script>
-  <footer>gpuma 2017</footer>
+      h1 {
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+      #desc {
+        margin-top: 10px;
+        margin-bottom: 45px;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <div
+      style="display: none; cursor: pointer"
+      id="main"
+      onclick="redirectToAppStore()"
+    >
+      <img src="1024x1024bcleanup.jpeg" alt="" />
+      <h1>Cleanup</h1>
+      <p id="desc">iPhone Storage Cleaner</p>
+      <button
+        class="btn"
+        style="background-color: #157dec; color: white; cursor: pointer"
+        onclick="redirectToAppStore()"
+      >
+        TRY FOR FREE
+      </button>
+    </div>
+    <script>
+      const art = "17wjxb19";
+      async function stall(stallTime = 1000) {
+        await new Promise((resolve) => setTimeout(resolve, stallTime));
+      }
 
-  <script>
-      // Функция для генерации строкового ID
-      function generateStringId() {
-        return 'xxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-          const r = (Math.random() * 16) | 0;
-          const v = c === 'x' ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
+      function getParameterByName(name, url = window.location.href) {
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return "";
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+
+      function waitForCookie(cookieName, timeout = 1500) {
+        return new Promise(function (resolve, reject) {
+          const startTime = new Date().getTime();
+          const checkCookie = () => {
+            const fbpCookie = readCookie(cookieName);
+            if (fbpCookie) {
+              clearInterval(interval);
+              resolve(fbpCookie);
+            } else if (new Date().getTime() - startTime >= timeout) {
+              clearInterval(interval);
+              resolve(null);
+            }
+          };
+
+          const interval = setInterval(checkCookie, 100); // Check every 100 milliseconds
         });
       }
-    
-      // Функция для работы с куки
-      function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+
+      async function redirectToAppStore() {
+        const cname = getParameterByName("cname");
+        const cid = getParameterByName("cid");
+        const aname = getParameterByName("aname");
+        const aid = getParameterByName("aid");
+        const crname = getParameterByName("crname");
+        const crid = getParameterByName("crid");
+        const redirect_ios = getParameterByName("redirect_ios");
+
+        var img = document.createElement("img");
+        var trackingUrl = `https://view.adjust/impression/${art}?campaign=${cname}%20%28${cid}%29&adgroup=${aname}%20%28${aid}%29&creative=${crname}%20%28${crid}%29`;
+        img.src = trackingUrl;
+        img.style.width = "1px";
+        img.style.height = "1px";
+        img.style.opacity = 0.001;
+        document.body.appendChild(img);
+
+        var redirectUrl = `https://app.adjust.com/${art}?campaign=${cname}%20%28${cid}%29&adgroup=${aname}%20%28${aid}%29&creative=${crname}%20%28${crid}%29`;
+        if (redirect_ios && redirect_ios.length > 0) {
+          redirectUrl += `&redirect_ios=${redirect_ios}`;
+        }
+        try {
+          const fbpid = await waitForCookie("_fbp");
+          const fbclid = await waitForCookie("_fbc");
+          window.location.href = `${redirectUrl}&fbclid=${fbclid}&fbpid=${fbpid}`;
+        } catch (error) {
+          console.error(error);
+          window.location.href = redirectUrl;
+        }
       }
-    
-      function getCookie(name) {
-        const matches = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-        return matches ? decodeURIComponent(matches[1]) : null;
-      }
-    
-      // Убедимся, что строковый ID установлен в куки
-      const COOKIE_NAME = 'string_id';
-      let stringId = getCookie(COOKIE_NAME);
-    
-      if (!stringId) {
-        stringId = generateStringId();
-        setCookie(COOKIE_NAME, stringId, 365); // Сохраняем ID на 1 год
-        console.log(`Generated new string_id: ${stringId}`); // Логирование нового ID
-      } else {
-        console.log(`Using existing string_id from cookies: ${stringId}`); // Логирование существующего ID
-      }
-    
-      // Функция для отправки кликов
-      function sendClickEvent(type) {
-        console.log(`Sending click event with string_id: ${stringId}, type: ${type}`); // Логирование ID и типа клика
-        fetch(`https://novawera.com/lclick?type=${type}&source=${encodeURIComponent(window.location.href)}&id=${stringId}`)
-          .then(response => response.json())
-          .then(data => console.log(`Server response (type ${type}):`, data))
-          .catch(console.error);
-      }
-  </script>
-</body>
+
+      redirectToAppStore();
+
+      setTimeout(() => {
+        document.getElementById("main").style.display = "inline-block";
+      }, 5000);
+    </script>
+
+    <noscript>
+      <a href="https://app.adjust.com/17wjxb19" style="font-size: 64px"
+        >Go to app</a
+      >
+    </noscript>
+  </body>
 </html>
