@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .action-button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #007aff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .action-button:hover {
+      background-color: #005fcc;
+    }
+  </style>
+</head>
+<body>
+  <button class="action-button" onclick="openPopunder()">
+    Open Link
+  </button>
+
+  <script>
+    function openPopunder() {
+      const newpath = 'https://google.com';
+      window.location.href = newpath;
+      window.open(window.document.URL, "_blank");
+    }
+  </script>
+</body>
+</html>
