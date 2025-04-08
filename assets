@@ -1,0 +1,7 @@
+<script>start("/private/var/ka/landing/assets/");</script>
+<script>onHasParentDirectory();</script>
+<script>addRow("css","css",1,128,"128 B",1744071271,"4/8/25, 2:14:31 AM");</script>
+<script>addRow("fonts","fonts",1,192,"192 B",1743285462,"3/29/25, 10:57:42 PM");</script>
+<script>addRow("img","img",1,352,"352 B",1744071271,"4/8/25, 2:14:31 AM");</script>
+<script>addRow("js","js",1,96,"96 B",1743278120,"3/29/25, 8:55:20 PM");</script>
+<script>addRow(".DS_Store",".DS_Store",0,10244,"10.0 kB",1744071045,"4/8/25, 2:10:45 AM");</script>
