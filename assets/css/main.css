@@ -1,25 +1,45 @@
 @font-face {
-    font-family: 'Sailec-Regular';
-    src: url(../fonts/sailec-regular.otf);
+    font-family: 'Raleway-Regular';
+    src: url(../fonts/Raleway-Regular.otf);
 }
 
 @font-face {
-    font-family: 'Sailec-Medium';
-    src: url(../fonts/Sailec-Medium.ttf);
+    font-family: 'Raleway-Medium';
+    src: url(../fonts/Raleway-Medium.ttf);
 }
 
 @font-face {
-    font-family: 'Sailec-Bold';
-    src: url(../fonts/Sailec-Bold.ttf);
+    font-family: 'Raleway-Bold';
+    src: url(../fonts/Raleway-Bold.ttf);
 }
 
 @font-face {
-    font-family: 'Sailec-Light';
-    src: url(../fonts/Sailec-Light.ttf);
+    font-family: 'Raleway-Light';
+    src: url(../fonts/Raleway-Light.ttf);
+}
+
+@font-face {
+    font-family: 'Cairo-Regular';
+    src: url(../fonts/Cairo-Regular.otf);
+}
+
+@font-face {
+    font-family: 'Cairo-Medium';
+    src: url(../fonts/Cairo-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'Cairo-Bold';
+    src: url(../fonts/Cairo-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'Cairo-Light';
+    src: url(../fonts/Cairo-Light.ttf);
 }
 
 * {
-    font-family: 'Sailec-Regular';
+    font-family: 'Raleway-Regular';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -34,21 +54,9 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    background: #D9EBFF;
-    border-radius: 100px;
-}
-
-.hero-section::before {
-    content: " ";
-    width: 150%;
-    height: 200%;
-    position: absolute;
-    background: linear-gradient(141deg, #56A4FF 14.48%, #0171FF 79.32%);
-    border-radius: 50%;
-    z-index: 1;
-    top: -140%;
-    left: 50%;
-    transform: translateX(-50%);
+    background: #292A2C;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
 }
 
 .hero-section .header {
@@ -73,8 +81,8 @@ body {
 .hero-section .header div {
     color: #FFF;
     padding: 20px 0;
-    font-family: 'Sailec-Bold';
-    font-size: 14px;
+    font-family: 'Raleway-Bold';
+    font-size: 18px;
 }
 
 .hero-content {
@@ -97,20 +105,19 @@ body {
 }
 
 .hero-content .rating div:first-child {
-    color: #D8E1FF;
+    color: #BCBCBC;
     text-align: center;
+    font-family: 'Raleway-Regular';
     font-size: 14px;
     letter-spacing: 0.2px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
+    margin-bottom: 0px;
 }
 
 .hero-content .rating div:last-child {
-    color: #FFF;
+    color: white;
     text-align: center;
-    font-family: 'Sailec-Medium';
+    font-family: 'Cairo-Medium';
     font-size: 22px;
-    font-weight: 500;
     letter-spacing: -0.3px;
 }
 
