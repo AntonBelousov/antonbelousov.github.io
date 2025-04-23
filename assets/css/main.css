@@ -560,23 +560,52 @@ body {
     width: 135px;
 }
 
-.how-works {
-    margin-top: 80px;
-}
-
 .hw-container {
     max-width: 945px;
     margin: 0 auto;
 }
 
 .hw-container .title {
-    color: #333E63;
+    color: #2E4053;
     text-align: center;
-    font-family: 'Sailec-Medium';
+    font-family: 'Raleway-SemiBold';
     font-size: 40px;
-    line-height: 120%; /* 48px */
-    letter-spacing: -0.3px;
-    margin-bottom: 57px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 105px;
+    margin-bottom: 47px;
+}
+
+.hw-container .content-with-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.hw-container .content-with-bar .bars-container {
+    background-color: #EAF9FF;
+    flex-shrink: 0;
+    border-radius: 15px;
+    width: 30px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+}
+
+.hw-container .content-with-bar .bars-container .bar {
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to bottom, #156FDA, #10A3DB, #07CDD9);
+    border-radius: 15px;
+}
+
+.bars-container .bar img {
+    position: absolute;
+    width: 30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .hw-container .content {
@@ -589,40 +618,6 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 20px;
-} 
-
-.hw-container .content .item .number {
-    color: #333E63;
-    font-family: 'Sailec-Medium';
-    font-size: 18px;
-    line-height: 130%; /* 23.4px */
-    letter-spacing: -0.3px;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid #353F60;
-    background: #D9EBFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-
-.hw-container .content .item .container div:first-child {
-    color: #333E63;
-    font-family: 'Sailec-Medium';
-    font-size: 20px;
-    line-height: 130%; /* 26px */
-    letter-spacing: -0.3px;
-    margin-bottom: 10px;
-}
-
-.hw-container .content .item .container div:last-child {
-    color: rgba(51, 62, 99, 0.75);
-    font-size: 20px;
-    line-height: 150%; /* 30px */
-    letter-spacing: -0.3px;
 }
 
 .footer {
@@ -1694,8 +1689,6 @@ html, body {
     padding: 88px 24px;
     transition: .3s;
     transform: translateX(100%);
-    
-    
 }
 
 .mobile-menu-popup.active .container{

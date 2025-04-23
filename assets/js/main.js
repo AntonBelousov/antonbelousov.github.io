@@ -324,21 +324,51 @@ document.addEventListener('DOMContentLoaded', function() {
   let mobileMenu = document.querySelector('.mobile-menu-popup'),
       closeBtn = document.querySelector('.mobile-menu-popup .close-btn');
 
-  burger.addEventListener('click', function() {
-    mobileMenu.classList.toggle('active');
-  })
+  // burger.addEventListener('click', function() {
+  //   mobileMenu.classList.toggle('active');
+  // })
 
-  mobileMenu.addEventListener('click', function(event) {
-    if(event.target === mobileMenu) {
-      event.stopPropagation();
-    mobileMenu.classList.remove('active');
-    }
-  })
+  // mobileMenu.addEventListener('click', function(event) {
+  //   if(event.target === mobileMenu) {
+  //     event.stopPropagation();
+  //   mobileMenu.classList.remove('active');
+  //   }
+  // })
 
-  closeBtn.addEventListener('click', function() {
-    mobileMenu.classList.remove('active');
-  })
+  // closeBtn.addEventListener('click', function() {
+  //   mobileMenu.classList.remove('active');
+  // })
   
 
-  
+  function updateBarHeight() {
+    const bar = document.querySelector('.bar');
+
+    const barImg1 = document.querySelector('.bar-img-1');
+    const barImg2 = document.querySelector('.bar-img-2');
+    const barImg3 = document.querySelector('.bar-img-3');
+
+    const wrapper = document.querySelector('.content-with-bar');
+    const specialTitle1 = document.querySelector('.special-title-1');
+    const specialTitle2 = document.querySelector('.special-title-2');
+    const specialTitle3 = document.querySelector('.special-title-3');
+        
+    const wrapperTop = wrapper.getBoundingClientRect().top;
+    const title1_rect = specialTitle1.getBoundingClientRect();
+    const title2_rect = specialTitle2.getBoundingClientRect();
+    const title3_rect = specialTitle3.getBoundingClientRect();
+
+    const title1_center = title1_rect.top + title1_rect.height / 2 - wrapperTop;
+    const title2_center = title2_rect.top + title2_rect.height / 2 - wrapperTop;
+    const title3_center = title3_rect.top + title3_rect.height / 2 - wrapperTop;
+    const title3_bottom = title3_rect.bottom - wrapperTop + 10;
+    
+    bar.style.height = `${title3_bottom}px`;
+
+    barImg1.style.top = `${title1_center}px`;
+    barImg2.style.top = `${title2_center}px`;
+    barImg3.style.top = `${title3_center}px`;
+  }
+
+  window.addEventListener('load', updateBarHeight);
+  window.addEventListener('resize', updateBarHeight);
 })
