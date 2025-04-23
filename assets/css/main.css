@@ -282,7 +282,6 @@ body {
 
 .technologies{ 
     margin-top: 112px;
-    background: #292A2C;
 }
 
 .technologies-container{
@@ -348,6 +347,10 @@ body {
     line-height: normal;
     transition: .3s;
     margin: 20px auto 0 auto;
+}
+
+.gray-bckg {
+    background: #292A2C;
 }
 
 .swiper {
