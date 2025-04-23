@@ -24,8 +24,17 @@
         min-width: 300px;
         max-width: 320px;
     }
+
+    .technologies .blue-btn {
+        width: 320px;  
+    }
 }
 
+@media screen and (max-width: 340px) {
+    .technologies .blue-btn {
+      width: clamp(300px, 88vw, 320px);
+    }
+  }
 
 @media screen and (max-width: 900px) {
     .footer {
@@ -213,15 +222,6 @@
         font-family: 'Sailec-Medium';
     }
     
-    .technologies-container .blue-btn {
-        max-width: none;
-        margin-top: 24px;
-        margin-bottom: 58px;
-        width: 100%;
-        /* margin-left: 20px; */
-        /* margin-right: 20px; */
-    }
-    
     .hero-content .title {
         font-size: 24px;
         margin-top: 20px;
@@ -257,6 +257,10 @@
         display: flex;
         align-items: center;
         justify-content: center !important;
+    }
+
+    .avatars .avatar {
+        width: 60px;
     }
 }
 
