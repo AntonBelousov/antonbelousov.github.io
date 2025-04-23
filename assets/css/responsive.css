@@ -118,6 +118,13 @@
         font-size: 16px;
     }
     
+    .about-us .about-us-container .logos {
+        gap: 45px;
+    }
+
+    .about-us .about-us-container .logos img {
+        width: 90px;
+    }
 }
 
 
@@ -491,6 +498,23 @@
     }
 
     .avatars .avatar {
+        width: 60px;
+    }
+
+    .review-author {
+        margin-top: 0px;
+    }
+    
+    .about-us .about-us-container {
+        padding-top: 30px;
+        padding-bottom: 40px;
+    }
+
+    .about-us .about-us-container .logos {
+        gap: 45px;
+    }
+
+    .about-us .about-us-container .logos img {
         width: 60px;
     }
 }
