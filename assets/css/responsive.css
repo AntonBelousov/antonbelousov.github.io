@@ -6,8 +6,8 @@
 
 @media screen and (max-width: 1024px) {
     .benefits-section .content {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 160px);
+        grid-template-rows: repeat(2, 1fr);
     }
     
     .technologies-container, .hw-container, .footer {
@@ -22,9 +22,7 @@
         flex-direction: column;
         gap: 20px;
     }
-}
 
-@media screen and (max-width: 500px) {
     .secure-section {
         margin-top: 32px;
         flex-direction: column;
@@ -60,11 +58,6 @@
 
 @media screen and (max-width: 768px) {
     
-    .benefits-section .content {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-    
     .benefits-section .item .image {
         height: 100px;
         margin-bottom: 10px;
@@ -72,12 +65,7 @@
     
     .benefits-section .item .image img {
         height: 100%;
-    }
-    
-    .benefits-section .item {
-        max-width: 200px;
-    }
-    
+    }    
     
     .benefits-section .item div:not(.image) {
         font-size: 15px;
@@ -104,6 +92,12 @@
 
 
 @media screen and (max-width: 640px) {
+
+    .benefits-section .content {
+        grid-template-columns: repeat(3, 107px);
+        grid-template-rows: repeat(2, 1fr);
+    }
+
     .technologies-container .title, .slider-container .title, .hw-container .title, .benefits-section .title {
         font-size: 24px;
         margin-bottom: 30px;
@@ -180,7 +174,6 @@
     }
     
     .slider-container {
-        
         padding: 0;
     }
     
@@ -220,12 +213,6 @@
         margin-top: 28px;
         height: 50px;
         font-size: 16px;
-    }
-    
-    .benefits-section .content {
-        grid-template-columns: repeat(2, 160px);
-        gap: 15px;
-        max-width: fit-content;
     }
     
     .benefits-section .item {
