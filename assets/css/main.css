@@ -190,11 +190,6 @@ body {
     transition: .3s;
 }
 
-.hero-content button:hover, .blue-btn:hover {
-    background: #054ec4;
-    cursor: pointer;
-}
-
 .secure-section {
     margin-top: 67px;
     display: flex;
@@ -275,7 +270,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+}
 
 .benefits-section .item div:not(.image) {
     color: #2E4053;
@@ -306,30 +301,40 @@ body {
 
 .technologies-container .content {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 20px;
 }
 
 
 .technologies-container .content .item {
-    border-radius: 14px;
-    background: #F8F9FA;
-    padding: 15px 22px;
+    border-radius: 16px;
+    background: white;
     display: flex;
     align-items: center;
     gap: 20px;
-    color: #333E63;
-    font-family: 'Sailec-Medium';
-    font-size: 20px;
+    color: #2E4053;
+    font-family: 'Raleway-Medium';
+    font-size: 18px;
     line-height: normal;
+    width: 335px;
+    height: 210px;
+    line-height: 130%;
+    letter-spacing: -0.3px;
 }
 
+.technologies-container .content .item .text {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Raleway-Medium';
+    font-size: 18px;
+}
 
 .blue-btn {
     border-radius: 10px;
-    background: #065FEF;
-    max-width: 320px;
-    width: 100%;
+    background: linear-gradient(to bottom left, #07CDD9, #10A3DB 26%, #156FDA);
+    width: 260px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -338,8 +343,8 @@ body {
     outline: 0;
     color: #FFF;
     text-align: center;
-    font-family: 'Sailec-Medium';
-    font-size: 20px;
+    font-family: 'Raleway-SemiBold';
+    font-size: 18px;
     line-height: normal;
     transition: .3s;
     margin: 20px auto 0 auto;
