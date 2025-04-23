@@ -390,20 +390,19 @@ body {
     max-width: 100%;
     padding: 0 10px;
     
-    scrollbar-width: none;        /* Firefox */
-    -ms-overflow-style: none;     /* IE 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .avatars-wrapper {
     max-width: calc(100%-48px);
-    /* translate: 24px; */
     padding-left: 24px;
     padding-right: 24px;
     overflow: hidden;
 }
 
 .avatars::-webkit-scrollbar {
-    display: none;                /* Chrome/Safari */
+    display: none;
 }
 
 .avatars .avatar {
