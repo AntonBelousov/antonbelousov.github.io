@@ -269,10 +269,6 @@
         align-items: center;
         justify-content: center !important;
     }
-
-    .avatars .avatar {
-        width: 60px;
-    }
 }
 
 
@@ -485,6 +481,16 @@
     
     .disclaimer {
         font-size: 12px;
+    } 
+}
+
+@media screen and (max-width: 430px) {
+    .avatars {
+        padding-left: 24px;
+        padding-right: 24px;
     }
-    
+
+    .avatars .avatar {
+        width: 60px;
+    }
 }
