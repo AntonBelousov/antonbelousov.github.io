@@ -63,9 +63,9 @@
         margin-bottom: 10px;
     }
     
-    .benefits-section .item .image img {
+    /* .benefits-section .item .image img {
         height: 100%;
-    }    
+    }     */
     
     .benefits-section .item div:not(.image) {
         font-size: 15px;
@@ -216,11 +216,8 @@
     }
     
     .benefits-section .item {
-        height: 175px;
-    }
-    
-    .benefits-section .item .image {
-        height: 80px;
+        height: 169px;
+        border-radius: 8px;
     }
     
     .swiper-slide {
