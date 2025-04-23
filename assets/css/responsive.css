@@ -109,15 +109,6 @@
         padding: 0 10px;
     }
     
-    .hw-container .content .item .container div:first-child {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
-    
-    .hw-container .content .item .container div:last-child {
-        font-size: 16px;
-    }
-    
     .about-us .about-us-container .logos {
         gap: 45px;
     }
@@ -176,19 +167,6 @@
         align-items: center;
         margin-left: 20px;
         margin-right: 20px;
-    }
-    
-    .hw-container .content .item .number {
-        font-size: 18px;
-    }
-    
-    .hw-container .content .item {
-        align-items: center;
-    }
-    
-    .hw-container .content .item .container div:first-child {
-        font-size: 16px;
-        margin-bottom: 15px;
     }
     
     .blue-btn {
@@ -528,6 +506,10 @@
         margin-top: 49px;
         margin-bottom: 35px;
     }
+    
+    .hw-container .content-with-bar {
+        gap: 20px;
+    }
 
     .hw-container .content-with-bar .bars-container {
         border-radius: 10px;
@@ -541,5 +523,22 @@
     
     .bars-container .bar img {
         width: 20px;
+    }
+
+    .hw-container .content {
+        gap: 32px;
+    }
+
+    .hw-container .content .container div {
+        font-size: 16px;
+    }
+
+    .hw-container .content .container .text {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    
+    .hw-container .content .container .text:last-child {
+        margin-bottom: 0px;
     }
 }
