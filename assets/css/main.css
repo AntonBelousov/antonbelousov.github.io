@@ -44,7 +44,6 @@
 }
 
 * {
-    font-family: 'Raleway-Regular';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -197,7 +196,7 @@ body {
 }
 
 .secure-section {
-    margin-top: 56px;
+    margin-top: 67px;
     display: flex;
     align-items: center;
     gap: 28px;
@@ -205,18 +204,19 @@ body {
 }
 
 .secure-section .item {
-
+    height: 66px;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
-    border-radius: 14px;
-background: #F8F9FA;
-padding: 14px 16px;
-color: #333E63;
-font-size: 20px;
-line-height: 130%; /* 26px */
-letter-spacing: -0.42px;
+    border-radius: 15px;
+    padding: 14px 16px;
+    color: #2E4053;
+    font-size: 24px;
+    font-family: 'Raleway-Medium';
+    line-height: 130%; /* 26px */
+    letter-spacing: -0.42px;
+
+    border: 1.5px dashed #7AAFFF;
 }
 
 .benefits-section{ 
