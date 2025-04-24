@@ -1,0 +1,18 @@
+{
+    "applinks": {
+        "details": [
+            {
+                "appIDs": [
+
+                    "2KKGXY59CU.com.reluna.client.ios"
+                ],
+                "components": [
+                    {
+                        "/": "login/change-password/*",
+                        "comment": "redirect is an endpoint for password recovery"
+                    }
+                ]
+            }
+        ]
+    }
+}
