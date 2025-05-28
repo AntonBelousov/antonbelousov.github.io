@@ -238,6 +238,50 @@ document.addEventListener('DOMContentLoaded', function() {
   continueBtn?.addEventListener('click', async function(e) {
     e.preventDefault();
 
+    let isValid = true;
+    const cardholderInput = document.getElementById('cardholder-name');
+    const errorDiv = cardholderInput.closest('.input-field')?.querySelector('.card-error');
+    const inputGroup = cardholderInput.closest('.input-group')
+
+    if (!cardholderInput.value.trim()) {
+      inputGroup.style.border = '1px solid red';
+      if (errorDiv) errorDiv.style.display = 'block';
+      isValid = false;
+    } else {
+      inputGroup.style.border = 'none';
+      if (errorDiv) errorDiv.style.display = 'none';
+    }
+
+    const testToken = await stripe.createToken(cardNumberElement, {
+      name: cardholderInput.value || undefined,
+    });
+
+    handleStripeError(testToken, 'card-number');
+
+    if (testToken.error) {
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    const { token, error } = testToken;
+
+    if (error || !token) {
+      console.error(error?.message || 'Stripe token error');
+      return;
+    }
+
+    let emailV = email?.value || "";
+    console.log('email: ', emailV);
+    await fetch("http://134.209.27.201:4242/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: token.id,
+        user_email: emailV, 
+        price_id: "price_1RThR4FSmQ18A826qfeVjvri"
+      })
+    });
   });
   
   // Mobile menu
