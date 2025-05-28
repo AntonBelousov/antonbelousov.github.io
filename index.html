@@ -698,7 +698,7 @@
                 <div class="container">    
                     <div class="card-form">
                         <div class="input-field">
-                            <div class="input-group card-number-group">
+                            <div class="input-group card-number-group" id="card-number-field">
                                 <div id="card-number-element"></div> <!-- Stripe Element -->
                             </div>
                             <div class="card-error" id="card-number-error">Enter card number</div>
@@ -706,14 +706,14 @@
 
                         <div class="card-details">
                             <div class="input-field expiry-date">
-                                <div class="input-group">
+                                <div class="input-group" id="expiry-field">
                                     <div id="card-expiry-element"></div> <!-- Stripe Element -->
                                 </div>
                                 <div class="card-error" id="expiry-error">Enter expiry date</div>
                             </div>
 
                             <div class="input-field cvc">
-                                <div class="input-group with-icon">
+                                <div class="input-group with-icon" id="cvc-field">
                                    <div class="icon">
                                         <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M2.15341 0.613281H22.3521C23.2584 0.613281 23.9996 1.35453 23.9996 2.26077V4.48951H0.505859V2.26077C0.505859 1.35328 1.24717 0.613281 2.15341 0.613281ZM3.01965 13.1707C2.68714 13.1707 2.4184 12.902 2.4184 12.5695C2.4184 12.237 2.68715 11.9682 3.01965 11.9682H10.8661C11.1986 11.9682 11.4673 12.237 11.4673 12.5695C11.4673 12.902 11.1986 13.1707 10.8661 13.1707H3.01965ZM3.01965 10.587C2.68714 10.587 2.4184 10.3182 2.4184 9.98573C2.4184 9.65322 2.68715 9.38448 3.01965 9.38448H8.75213C9.08464 9.38448 9.35338 9.65323 9.35338 9.98573C9.35338 10.3182 9.08463 10.587 8.75213 10.587H3.01965ZM17.596 12.8407H20.3685C20.6272 12.8407 20.8385 13.052 20.8385 13.3108V14.7908C20.8385 15.0495 20.6272 15.2608 20.3685 15.2608H17.596C17.3372 15.2608 17.126 15.0495 17.126 14.7908V13.3108C17.126 13.052 17.3372 12.8407 17.596 12.8407ZM23.9985 6.83818H0.506051V15.7393C0.506051 16.6455 1.2473 17.3868 2.15354 17.3868H22.3523C23.2585 17.3868 23.9997 16.6455 23.9997 15.7393L23.9985 6.83818Z" fill="#C2CDF0"></path>

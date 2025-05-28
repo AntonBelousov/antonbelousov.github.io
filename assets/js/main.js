@@ -388,13 +388,23 @@ function mountStripe() {
 
 function handleStripeError(event, fieldId) {
   const errorElement = document.getElementById(`${fieldId}-error`);
-  if (!errorElement) return;
+  const fieldElement = document.getElementById(`${fieldId}-field`);
 
   if (event.error) {
-    errorElement.textContent = event.error.message;
-    errorElement.style.display = 'block';
+    if (errorElement) {
+      errorElement.textContent = event.error.message;
+      errorElement.style.display = 'block';
+    }
+    if (fieldElement) {
+      fieldElement.style.border = '1px solid red';
+    }
   } else {
-    errorElement.textContent = '';
-    errorElement.style.display = 'none';
+    if (errorElement) {
+      errorElement.textContent = '';
+      errorElement.style.display = 'none';
+    }
+    if (fieldElement) {
+      fieldElement.style.border = 'none';
+    }
   }
 }
