@@ -235,13 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  continueBtn?.addEventListener('click', async function(e) {
+  continueBtn?.addEventListener('click', async function (e) {
     e.preventDefault();
+
+    continueBtn.disabled = true;
+    const originalText = continueBtn.textContent;
+    continueBtn.textContent = 'Processing...';
 
     let isValid = true;
     const cardholderInput = document.getElementById('cardholder-name');
     const errorDiv = cardholderInput.closest('.input-field')?.querySelector('.card-error');
-    const inputGroup = cardholderInput.closest('.input-group')
+    const inputGroup = cardholderInput.closest('.input-group');
 
     if (!cardholderInput.value.trim()) {
       inputGroup.style.border = '1px solid red';
@@ -262,26 +266,46 @@ document.addEventListener('DOMContentLoaded', function() {
       isValid = false;
     }
 
-    if (!isValid) return;
+    if (!isValid) {
+      continueBtn.disabled = false;
+      continueBtn.textContent = originalText;
+      return;
+    }
 
     const { token, error } = testToken;
 
     if (error || !token) {
       console.error(error?.message || 'Stripe token error');
+      continueBtn.disabled = false;
+      continueBtn.textContent = originalText;
       return;
     }
 
-    let emailV = email?.value || "";
-    console.log('email: ', emailV);
-    await fetch("http://134.209.27.201:4242/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: token.id,
-        user_email: emailV, 
-        price_id: "price_1RThR4FSmQ18A826qfeVjvri"
-      })
-    });
+    try {
+      const res = await fetch("http://134.209.27.201:4242/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: token.id,
+          user_email: email?.value || "",
+          price_id: "price_1RThR4FSmQ18A826qfeVjvri"
+        })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json.error || 'Subscription failed');
+      }
+
+      alert('Subscription successful!');
+    } catch (err) {
+      console.error(err);
+      alert('Error: ' + err.message);
+    }
+
+    continueBtn.disabled = false;
+    continueBtn.textContent = originalText;
   });
   
   // Mobile menu
