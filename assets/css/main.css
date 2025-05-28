@@ -1617,6 +1617,7 @@ body {
     border-radius: 8px;
     border-radius: 8px;
     background: #EFEFEF;
+    height: 50px;
 }
 
 .input-field {
@@ -1683,8 +1684,12 @@ body {
 .card-form input {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.30);
-    padding: 15px 10px;
+    padding: 0px 0px;
     background: transparent;
+}
+
+.card-form .input-group {
+    padding: 15px 10px;
 }
 
 .card-form input::placeholder {

@@ -32,6 +32,9 @@ function startCountdownFromTenMinutes() {
 // Blue or white version
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  mountStripe();
+
   let style = 'blue';
   document.body.classList.add(style);
   let blueButtons = document.querySelectorAll('.blue-btn'),
@@ -231,86 +234,28 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  
-  function validateCard() {
-    let isValid = true;
-    
-    cardInputs.forEach(input => {
-      if (!input.value) {
-        input.style.border = '1px solid red';
-        isValid = false;
 
-        const inputField = input.closest('.input-field');
-        const errorElement = inputField?.querySelector('.card-error');
-    
-        if (errorElement) {
-          errorElement.style.display = 'block'; 
-        }
-      }
-    });
-    
-    // Basic card number validation (16 digits)
-    let cardNumber = document.querySelector('input[placeholder="Card number"]');
-    if (cardNumber.value && cardNumber.value.replace(/\s/g, '').length !== 16) {
-      cardNumber.style.border = '1px solid red';
-      isValid = false;
-      const inputField = input.closest('.input-field');
-        const errorElement = inputField?.querySelector('.card-error');
-    
-        if (errorElement) {
-          errorElement.style.display = 'block'; 
-        }
-    }
-    
-    // Expiry date validation (MM/YY format)
-    let expiryDate = document.querySelector('input[placeholder="Expiry date"]');
-    if (expiryDate.value && !/^\d{2}\/\d{2}$/.test(expiryDate.value)) {
-      expiryDate.style.border = '1px solid red';
-      isValid = false;
-      const inputField = input.closest('.input-field');
-        const errorElement = inputField?.querySelector('.card-error');
-    
-        if (errorElement) {
-          errorElement.style.display = 'block'; 
-        }
-    }
-    
-    // CVV validation (3-4 digits)
-    let CVV = document.querySelector('input[placeholder="CVV"]');
-    if (CVV.value && !/^\d{3,4}$/.test(CVV.value)) {
-      CVV.style.border = '1px solid red';
-      isValid = false;
-      const inputField = input.closest('.input-field');
-        const errorElement = inputField?.querySelector('.card-error');
-    
-        if (errorElement) {
-          errorElement.style.display = 'block'; 
-        }
-    }
-    
-    return isValid;
-  }
-  
-  continueBtn.addEventListener('click', function(e) {
+  continueBtn?.addEventListener('click', async function(e) {
     e.preventDefault();
-    validateCard();
+
   });
+
   
   // Prevent letters in card number and expiry date
-  let numberCard = document.querySelector('#numberCard');
-  let dateInput = document.querySelector('#expiryDate');
+  // let numberCard = document.querySelector('#numberCard');
+  // let dateInput = document.querySelector('#expiryDate');
   
-  numberCard.addEventListener('keypress', function(e) {
-    if (!/^\d$/.test(e.key)) {
-      e.preventDefault();
-    }
-  });
+  // numberCard.addEventListener('keypress', function(e) {
+  //   if (!/^\d$/.test(e.key)) {
+  //     e.preventDefault();
+  //   }
+  // });
   
-  dateInput.addEventListener('keypress', function(e) {
-    if (!/^\d$/.test(e.key)) {
-      e.preventDefault();
-    }
-  });
+  // dateInput.addEventListener('keypress', function(e) {
+  //   if (!/^\d$/.test(e.key)) {
+  //     e.preventDefault();
+  //   }
+  // });
   
   
   // Mobile menu
@@ -336,6 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function updateBarHeight() {
     const bar = document.querySelector('.bar');
+    if (!bar) { return; }
     
     const barImg1 = document.querySelector('.bar-img-1');
     const barImg2 = document.querySelector('.bar-img-2');
@@ -370,20 +316,48 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
       mobileMenu.classList.remove('init');
     });
+  
+
+    // section2.classList.remove('hidden-section');
+    // section2.classList.add('hidden-section');
+    section1.remove();
+    section3.classList.remove('hidden-section');
+    secureSection.classList.add('hidden-section');
+    emailSection.classList.add('hidden-section');
+    checkoutSection.classList.remove('hidden-section');
+    section3.classList.remove('block-scroll');
+    startCountdownFromTenMinutes();
+    // requestAnimationFrame(animateProgress);
+    // storageContainer.classList.add('hidden-section');
+    // completedContainer.classList.remove('hidden-section');
   });
 
-  //   // section2.classList.remove('hidden-section');
-  //   // section2.classList.add('hidden-section');
-  //   section1.remove();
-  //   section3.classList.remove('hidden-section');
-  //   secureSection.classList.add('hidden-section');
-  //   emailSection.classList.add('hidden-section');
-  //   checkoutSection.classList.remove('hidden-section');
-  //   section3.classList.remove('block-scroll');
-  //   startCountdownFromTenMinutes();
-  //   // requestAnimationFrame(animateProgress);
-  //   // storageContainer.classList.add('hidden-section');
-  //   // completedContainer.classList.remove('hidden-section');
-  // });
-
 })
+
+function mountStripe() {
+  const stripe = Stripe('pk_test_51RRRkMFSmQ18A826gulqxxmaFrwi1ZY94Qmw3ck96KPa8Du9QHxp4Jme7WtQT5raNomM8KKrOjFnbZyYv2dTH69z00bpV5a8yI');
+  const elements = stripe.elements();
+
+  const style = {
+    base: {
+      iconColor: '#666EE8',
+      color: '#31325F',
+      fontWeight: 300,
+      fontSize: '15px',
+      '::placeholder': {
+        color: '#CFD7E0',
+      },
+    }
+  };
+
+  const cardNumber = elements.create('cardNumber', { style });
+  const cardExpiry = elements.create('cardExpiry', { style });
+  const cardCvc = elements.create('cardCvc', { style });
+
+  cardNumber.mount('#card-number-element');
+  cardExpiry.mount('#card-expiry-element');
+  cardCvc.mount('#card-cvc-element');
+
+  const continueBtn = document.getElementById('continueBtn');
+  const cardholderNameInput = document.getElementById('cardholder-name');
+}
