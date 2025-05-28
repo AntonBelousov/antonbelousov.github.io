@@ -239,24 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
 
   });
-
-  
-  // Prevent letters in card number and expiry date
-  // let numberCard = document.querySelector('#numberCard');
-  // let dateInput = document.querySelector('#expiryDate');
-  
-  // numberCard.addEventListener('keypress', function(e) {
-  //   if (!/^\d$/.test(e.key)) {
-  //     e.preventDefault();
-  //   }
-  // });
-  
-  // dateInput.addEventListener('keypress', function(e) {
-  //   if (!/^\d$/.test(e.key)) {
-  //     e.preventDefault();
-  //   }
-  // });
-  
   
   // Mobile menu
   let burger = document.querySelector('.hero-section .header .burger-menu');
@@ -333,31 +315,42 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 })
+let stripe, elements, cardNumberElement, cardExpiryElement, cardCvcElement;
 
 function mountStripe() {
-  const stripe = Stripe('pk_test_51RRRkMFSmQ18A826gulqxxmaFrwi1ZY94Qmw3ck96KPa8Du9QHxp4Jme7WtQT5raNomM8KKrOjFnbZyYv2dTH69z00bpV5a8yI');
-  const elements = stripe.elements();
+  stripe = Stripe('pk_test_51RRRkMFSmQ18A826gulqxxmaFrwi1ZY94Qmw3ck96KPa8Du9QHxp4Jme7WtQT5raNomM8KKrOjFnbZyYv2dTH69z00bpV5a8yI');
 
   const style = {
-    base: {
-      iconColor: '#666EE8',
-      color: '#31325F',
-      fontWeight: 300,
-      fontSize: '15px',
-      '::placeholder': {
-        color: '#CFD7E0',
-      },
+    invalid: {
+      color: '#B41B00',
     }
   };
 
-  const cardNumber = elements.create('cardNumber', { style });
-  const cardExpiry = elements.create('cardExpiry', { style });
-  const cardCvc = elements.create('cardCvc', { style });
+  elements = stripe.elements();
 
-  cardNumber.mount('#card-number-element');
-  cardExpiry.mount('#card-expiry-element');
-  cardCvc.mount('#card-cvc-element');
+  cardNumberElement = elements.create('cardNumber', {style});
+  cardNumberElement.mount('#card-number-element');
 
-  const continueBtn = document.getElementById('continueBtn');
-  const cardholderNameInput = document.getElementById('cardholder-name');
+  cardExpiryElement = elements.create('cardExpiry', {style});
+  cardExpiryElement.mount('#card-expiry-element');
+
+  cardCvcElement = elements.create('cardCvc', {style});
+  cardCvcElement.mount('#card-cvc-element');
+
+  cardNumberElement.on('change', (event) => handleStripeError(event, 'card-number'));
+  cardExpiryElement.on('change', (event) => handleStripeError(event, 'expiry'));
+  cardCvcElement.on('change', (event) => handleStripeError(event, 'cvc'));
+}
+
+function handleStripeError(event, fieldId) {
+  const errorElement = document.getElementById(`${fieldId}-error`);
+  if (!errorElement) return;
+
+  if (event.error) {
+    errorElement.textContent = event.error.message;
+    errorElement.style.display = 'block';
+  } else {
+    errorElement.textContent = '';
+    errorElement.style.display = 'none';
+  }
 }
