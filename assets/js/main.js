@@ -235,6 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  const cardholderInput = document.getElementById('cardholder-name');
+  const errorDiv = cardholderInput.closest('.input-field')?.querySelector('.card-error');
+  const inputGroup = cardholderInput.closest('.input-group');
+  
+  cardholderInput.addEventListener('input', () => {
+  if (cardholderInput.value.trim()) {
+    inputGroup.style.border = 'none';
+    if (errorDiv) errorDiv.style.display = 'none';
+  }
+});
+
   continueBtn?.addEventListener('click', async function (e) {
     e.preventDefault();
 
@@ -282,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     try {
-      const res = await fetch("http://134.209.27.201:4242/subscribe", {
+      const res = await fetch("https://oneccleanerapp.com/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
