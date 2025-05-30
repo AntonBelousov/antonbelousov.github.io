@@ -150,15 +150,41 @@ document.addEventListener('DOMContentLoaded', function() {
   // Package selection
   let packages = document.querySelectorAll('.packages .item');
   
-  packages.forEach(function(package) {
-    package.addEventListener('click', function() {
-      packages.forEach(function(package) {
-        package.classList.remove('active');
-      })
-      package.classList.add('active');
-    })
-  })
+  // packages.forEach(function(package) {
+  //   package.addEventListener('click', function() {
+  //     packages.forEach(function(package) {
+  //       package.classList.remove('active');
+  //     })
+  //     package.classList.add('active');
+  //   })
+  // })
   
+  const productMap = {
+    "product1": 'price_1ROGKVHlPETypWUUmQB9mMpy',
+    "product2": 'price_1ROGQoHlPETypWUUPtHPSnOd',
+    "product3": 'price_1ROGQoHlPETypWUULsG6mYUI'
+  };
+
+  let selectedProductCode = productMap["week"];
+
+  packages.forEach(function(item) {
+    item.addEventListener('click', function() {
+      packages.forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+
+      const id = item.dataset.id;
+      console.log('Clicked item with data-id:', id);
+
+      if (!id || !(id in productMap)) {
+        console.error('⚠️ Invalid or missing data-id:', id);
+        return;
+      }
+      selectedProductCode = productMap[id];
+      
+      console.log('Selected:', selectedProductCode);
+    });
+  });
+
   // Card validation and formatting
   let cardInputs = document.querySelectorAll('.card-form input');
   let cardErrror = document.querySelectorAll('.card-error');
@@ -299,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         body: JSON.stringify({
           token: token.id,
           user_email: email?.value || "",
-          price_id: "price_1RThR4FSmQ18A826qfeVjvri"
+          price_id: selectedProductCode
         })
       });
 
