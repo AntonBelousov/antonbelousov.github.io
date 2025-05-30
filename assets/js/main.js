@@ -31,6 +31,15 @@ function startCountdownFromTenMinutes() {
 
 // Blue or white version
 
+const productMap = {
+  "product1": 'price_1ROGKVHlPETypWUUmQB9mMpy',
+  "product2": 'price_1ROGQoHlPETypWUUPtHPSnOd',
+  "product3": 'price_1ROGQoHlPETypWUULsG6mYUI'
+};
+
+let selectedProductCode = productMap["product1"];
+console.log('Selected:', selectedProductCode);
+
 document.addEventListener('DOMContentLoaded', function() {
 
   mountStripe();
@@ -71,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setProgress(progress);
     
     if (progress < 1) {
-      console.log(progress);
+      // console.log(progress);
       requestAnimationFrame(animateProgress);
     } else {
       console.log('finish');
@@ -159,13 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
   //   })
   // })
   
-  const productMap = {
-    "product1": 'price_1ROGKVHlPETypWUUmQB9mMpy',
-    "product2": 'price_1ROGQoHlPETypWUUPtHPSnOd',
-    "product3": 'price_1ROGQoHlPETypWUULsG6mYUI'
-  };
-
-  let selectedProductCode = productMap["week"];
 
   packages.forEach(function(item) {
     item.addEventListener('click', function() {
@@ -318,15 +320,20 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
+
     try {
+      const payload = {
+        token: token.id,
+        user_email: email?.value || "",
+        price_id: selectedProductCode
+      };
+
+      console.log("Sending subscription request with payload:", payload);
+
       const res = await fetch("https://oneccleanerapp.com/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: token.id,
-          user_email: email?.value || "",
-          price_id: selectedProductCode
-        })
+        body: JSON.stringify(payload)
       });
 
       const json = await res.json();
@@ -407,13 +414,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // section2.classList.remove('hidden-section');
     // section2.classList.add('hidden-section');
-    section1.remove();
-    section3.classList.remove('hidden-section');
-    secureSection.classList.add('hidden-section');
-    emailSection.classList.add('hidden-section');
-    checkoutSection.classList.remove('hidden-section');
-    section3.classList.remove('block-scroll');
-    startCountdownFromTenMinutes();
+    // section1.remove();
+    // section3.classList.remove('hidden-section');
+    // secureSection.classList.add('hidden-section');
+    // emailSection.classList.add('hidden-section');
+    // checkoutSection.classList.remove('hidden-section');
+    // section3.classList.remove('block-scroll');
+    // startCountdownFromTenMinutes();
     // requestAnimationFrame(animateProgress);
     // storageContainer.classList.add('hidden-section');
     // completedContainer.classList.remove('hidden-section');
