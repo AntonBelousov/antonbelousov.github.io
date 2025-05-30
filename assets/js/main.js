@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let stripe, elements, cardNumberElement, cardExpiryElement, cardCvcElement;
 
 function mountStripe() {
-  stripe = Stripe('pk_test_51RRRkMFSmQ18A826gulqxxmaFrwi1ZY94Qmw3ck96KPa8Du9QHxp4Jme7WtQT5raNomM8KKrOjFnbZyYv2dTH69z00bpV5a8yI');
+  stripe = Stripe('pk_test_51RSx5cQa9ru2DPNTllDHey2JxXXPgYhaDjq3AdGQ2gqbvDWQ2dsxDCdpXUq8MWc23H0qBGHee3WOa62vGwpIsBuK00uxrU2ztF');
 
   const style = {
     invalid: {
