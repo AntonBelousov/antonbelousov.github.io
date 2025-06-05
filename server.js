@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require("express");
 const bodyParser = require("body-parser");
 const Stripe = require("stripe");
@@ -28,7 +28,8 @@ app.post("/subscribe", async (req, res) => {
 });
 
 app.post("/payment-sheet", async (req, res) => {
-  const { user_email, price_id } = req.body;
+  console.log("v3");
+  const { user_email } = req.body;
 
   try {
     const customer = await stripe.customers.create({ email: user_email });
@@ -38,17 +39,13 @@ app.post("/payment-sheet", async (req, res) => {
       { apiVersion: '2025-05-28.basil' }
     );
 
-    const subscription = await stripe.subscriptions.create({
+    const setupIntent = await stripe.setupIntents.create({
       customer: customer.id,
-      items: [{ price: price_id }],
-      payment_behavior: 'default_incomplete',
-      expand: ['latest_invoice.payment_intent']
+      payment_method_types: ['card']
     });
 
-    const clientSecret = subscription.latest_invoice.payment_intent.client_secret;
-
     res.send({
-      paymentIntent: clientSecret,
+      setupIntent: setupIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: customer.id,
       publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
@@ -57,5 +54,6 @@ app.post("/payment-sheet", async (req, res) => {
     res.status(500).send({ error: err.message });
   }
 });
+
 
 app.listen(4242);
