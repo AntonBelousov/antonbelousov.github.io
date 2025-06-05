@@ -32,9 +32,9 @@ function startCountdownFromTenMinutes() {
 // Blue or white version
 
 const productMap = {
-  "product1": 'price_1ROGKVHlPETypWUUmQB9mMpy',
-  "product2": 'price_1ROGQoHlPETypWUUPtHPSnOd',
-  "product3": 'price_1ROGQoHlPETypWUULsG6mYUI'
+  "product1": 'price_1RWOueQa9ru2DPNT1dDXjj8n',
+  "product2": 'price_1RWOw7Qa9ru2DPNTWBir3iI4',
+  "product3": 'price_1RWOw7Qa9ru2DPNTfJkFOi7G'
 };
 
 let selectedProductCode = productMap["product1"];
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
         throw new Error(json.error || 'Subscription failed');
       }
 
-      alert('Subscription successful!');
+      window.location.href = 'https://apps.apple.com/us/id1530173098';
     } catch (err) {
       console.error(err);
       alert('Error: ' + err.message);
