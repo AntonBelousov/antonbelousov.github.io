@@ -10,12 +10,12 @@ body{font-family:system-ui;background:#1a1a2e;color:#eee;min-height:100vh;displa
 .c{flex:1;display:flex;flex-direction:column;max-width:900px;margin:0 auto;padding:.5rem;width:100%}
 h1{text-align:center;font-size:1.3rem;margin:.5rem 0}
 .h{display:flex;gap:.5rem;flex-wrap:nowrap}
-.h.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.h.scroll .s{flex:0 0 120px}
+.h.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;padding:8px 0;margin:-8px 0}
+.h.scroll::-webkit-scrollbar{display:none}
 @media(max-width:320px){.h{flex-wrap:wrap}}
 .s{flex:1;min-width:0;background:#16213e;border-radius:8px;padding:.5rem;text-align:center;position:relative}
 .s h2{font-size:.9rem;margin-bottom:.3rem}
-.del{position:absolute;top:4px;left:4px;width:20px;height:20px;background:#e94560;border:none;border-radius:50%;color:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.del{position:absolute;top:-6px;left:-6px;width:20px;height:20px;background:#e94560;border:none;border-radius:50%;color:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
 .del:hover{background:#ff6b6b}
 .add{flex:0 0 36px;background:#0f3460;border:2px dashed #444;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#888;cursor:pointer}
 .add:hover{border-color:#e94560;color:#e94560}
@@ -75,14 +75,33 @@ let p=$('players');p.innerHTML=''
 // Toggle scroll mode when 4+ total players (hero + villains)
 let total=1+V.length
 let wasScroll=p.classList.contains('scroll')
-p.classList.toggle('scroll',total>=SCROLL_AT)
-let nowScroll=p.classList.contains('scroll')
+let nowScroll=total>=SCROLL_AT
+p.classList.toggle('scroll',nowScroll)
+// Calculate block width in scroll mode
+let sw=null
+if(nowScroll){
+let baseW=100,gap=8,addW=36+gap // add button width + gap before it
+let cw=$('players').parentElement.clientWidth
+let hasAdd=V.length<MAX_V
+let gaps=total*gap // gaps between all items including before add
+let contentW=total*baseW+gaps+(hasAdd?addW:0)
+// Only expand if there's empty space
+if(contentW<cw){
+let availForBlocks=cw-gaps-(hasAdd?addW:0)
+sw=Math.floor(availForBlocks/total)
+}else{
+sw=baseW
+}
+}
 // Hero
-let hd=document.createElement('div');hd.className='s';hd.innerHTML='<h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
+let hd=document.createElement('div');hd.className='s'
+if(sw)hd.style.flex='0 0 '+sw+'px'
+hd.innerHTML='<h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
 p.appendChild(hd)
 // Villains
 V.forEach((v,i)=>{
 let vd=document.createElement('div');vd.className='s'
+if(sw)vd.style.flex='0 0 '+sw+'px'
 let del=V.length>MIN_V?'<button class="del" data-v="'+i+'">×</button>':''
 vd.innerHTML=del+'<h2>Villain '+(i+1)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
 p.appendChild(vd)
