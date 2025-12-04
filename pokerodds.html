@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Texas Hold'em Poker Odds Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui;background:#1a1a2e;color:#eee;min-height:100vh;display:flex;flex-direction:column}
+.c{flex:1;display:flex;flex-direction:column;max-width:900px;margin:0 auto;padding:.5rem;width:100%}
+h1{text-align:center;font-size:1.3rem;margin:.5rem 0}
+.h{display:flex;gap:.5rem;flex-wrap:nowrap}
+@media(max-width:320px){.h{flex-wrap:wrap}}
+.s{flex:1;min-width:0;background:#16213e;border-radius:8px;padding:.5rem;text-align:center}
+.s h2{font-size:.9rem;margin-bottom:.3rem}
+.row{display:flex;justify-content:center;gap:.3rem;margin:.3rem 0}
+.cd{width:42px;height:60px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;cursor:pointer;border:2px solid transparent}
+.cd:hover{transform:scale(1.05)}
+.cd.e{background:#0f3460;border:2px dashed #444;color:#444}
+.cd.a{border-color:#e94560}
+.eq{font-size:1.1rem;font-weight:700;color:#e94560}
+.tie{background:#16213e;border-radius:8px;padding:.3rem .5rem;text-align:center;display:none;align-self:flex-end}
+.tie h2{font-size:.8rem;margin-bottom:.2rem;color:#888}
+.tie .eq{color:#888}
+.b{background:#16213e;border-radius:8px;padding:.5rem;margin:.5rem 0;text-align:center}
+.b h2{font-size:.9rem;margin-bottom:.3rem}
+.btns{display:none;gap:.5rem;justify-content:center;margin:.5rem 0}
+.btn{padding:.6rem 1.2rem;font-size:1rem;font-weight:700;background:#e94560;color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn:disabled{background:#555;cursor:not-allowed}
+.clr{padding:.6rem 1.2rem;font-size:.8rem;background:0;color:#888;border:1px solid #555;border-radius:6px;cursor:pointer}
+.p{background:#16213e;border-radius:8px;padding:.5rem;margin-top:.5rem}
+.pg{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;justify-content:center;width:fit-content;margin:0 auto}
+.pc{width:42px;height:60px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;cursor:pointer}
+.pc:hover:not(.u){transform:scale(1.1);z-index:1}
+.pc.u{opacity:.3;cursor:not-allowed}
+._h{color:#e94560}._d{color:#4a90d9}._c{color:#2ecc71}._s{color:#333}
+.sr{display:none;justify-content:center;gap:12px;margin-bottom:.5rem;flex-direction:row}
+.sb{width:50px;height:50px;background:#0f3460;border:2px solid #444;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer}
+.sb.sel{border-color:#e94560;background:#1a1a2e}
+.rg{display:none;grid-template-columns:repeat(5,1fr);gap:8px;width:fit-content;margin:0 auto}
+@media(max-width:600px){.pg{display:none}.sr{display:flex}.rg{display:grid}}
+@media(max-height:690px){h1,.b h2,.s h2{display:none}}
+</style>
+</head>
+<body>
+<div class="c">
+<h1>Texas Hold'em Poker Odds Calculator</h1>
+<div class="h">
+<div class="s"><h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div></div>
+<div class="tie" id="ti"><h2>Tie</h2><div class="eq" id="te">--%</div></div>
+<div class="s"><h2>Villain</h2><div class="row" id="vc"></div><div class="eq" id="ve">--%</div></div>
+</div>
+<div class="b"><h2>Board</h2><div class="row" id="bc"></div></div>
+<div class="btns"><button class="btn" id="calc" disabled>Calculate</button><button class="clr" id="clr">Clear</button></div>
+<div class="p"><div class="sr" id="sr"></div><div class="rg" id="rg"></div><div class="pg" id="pg"></div></div>
+</div>
+<script>
+const R='AKQJT98765432',S='shdc',SY={s:'\u2660',h:'\u2665',d:'\u2666',c:'\u2663'},SC={s:'_s',h:'_h',d:'_d',c:'_c'}
+let H=[,],V=[,],B=[,,,,],A=null,CS='s'
+const $=s=>document.getElementById(s),q=s=>document.querySelectorAll(s)
+function init(){
+let g=$('pg');g.innerHTML=''
+for(let s of S)for(let r of R){let d=document.createElement('div');d.className='pc '+SC[s];d.dataset.c=r+s;d.textContent=r+SY[s];d.onclick=()=>sel(r+s);g.appendChild(d)}
+let sr=$('sr');sr.innerHTML=''
+for(let s of S){let b=document.createElement('div');b.className='sb '+SC[s]+(s===CS?' sel':'');b.textContent=SY[s];b.onclick=()=>{CS=s;updSel()};sr.appendChild(b)}
+updSel()
+$('hc').innerHTML='<div class="cd e" data-s="h0">?</div><div class="cd e" data-s="h1">?</div>'
+$('vc').innerHTML='<div class="cd e" data-s="v0">?</div><div class="cd e" data-s="v1">?</div>'
+$('bc').innerHTML=[0,1,2,3,4].map(i=>'<div class="cd e" data-s="b'+i+'">?</div>').join('')
+q('.cd').forEach(e=>e.onclick=()=>click(e.dataset.s))
+A='h0';upd()
+}
+function updSel(){
+q('.sb').forEach(e=>e.classList.toggle('sel',e.textContent===SY[CS]))
+let rg=$('rg');rg.innerHTML=''
+for(let r of R){let d=document.createElement('div');d.className='pc '+SC[CS];d.dataset.c=r+CS;d.textContent=r+SY[CS];d.onclick=()=>sel(r+CS);rg.appendChild(d)}
+upd()
+}
+function used(){return[...H,...V,...B].filter(c=>c)}
+function upd(){
+H.forEach((c,i)=>render('h'+i,c));V.forEach((c,i)=>render('v'+i,c));B.forEach((c,i)=>render('b'+i,c))
+q('.cd').forEach(e=>e.classList.toggle('a',e.dataset.s===A))
+let u=new Set(used());q('.pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)));q('#rg .pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)))
+let ok=H.every(c=>c)&&V.every(c=>c)&&(B.filter(c=>c).length===0||B.filter(c=>c).length>=3)
+$('calc').disabled=!ok
+if(ok)calc();else{$('he').textContent=$('ve').textContent='--%';$('ti').style.display='none'}
+}
+function render(s,c){
+let e=document.querySelector('[data-s="'+s+'"]');if(!e)return
+if(c){e.className='cd '+SC[c[1]];e.textContent=c[0]+SY[c[1]]}
+else{e.className='cd e';e.textContent='?'}
+}
+function sel(c){
+if(!A)A=next();if(!A||used().includes(c))return
+if(A[0]==='h')H[+A[1]]=c;else if(A[0]==='v')V[+A[1]]=c;else B[+A[1]]=c
+A=next();upd()
+}
+function next(){
+for(let i=0;i<2;i++)if(!H[i])return'h'+i
+for(let i=0;i<2;i++)if(!V[i])return'v'+i
+for(let i=0;i<5;i++)if(!B[i])return'b'+i
+return null
+}
+function click(s){
+if(s[0]==='h'&&H[+s[1]])H[+s[1]]=null
+else if(s[0]==='v'&&V[+s[1]])V[+s[1]]=null
+else if(s[0]==='b'&&B[+s[1]])B[+s[1]]=null
+A=s;upd()
+}
+$('clr').onclick=()=>{H=[,];V=[,];B=[,,,,];A='h0';$('he').textContent=$('ve').textContent='--%';$('ti').style.display='none';upd()}
+$('calc').onclick=calc
+function calc(){
+setTimeout(()=>{
+let r=mc(H,V,B.filter(c=>c))
+$('he').textContent=(r.h*100).toFixed(1)+'%';$('ve').textContent=(r.v*100).toFixed(1)+'%'
+if(r.t>0.001){$('ti').style.display='block';$('te').textContent=(r.t*100).toFixed(1)+'%'}else{$('ti').style.display='none'}
+},10)
+}
+function mc(h,v,b,n=1e5){
+let dk=[],av,hw=0,vw=0,t=0
+for(let s of S)for(let r of R)dk.push(r+s)
+let u=new Set([...h,...v,...b]);av=dk.filter(c=>!u.has(c))
+for(let i=0;i<n;i++){
+let sh=shuf([...av]),fb=[...b,...sh.slice(0,5-b.length)]
+let hh=ev([...h,...fb]),vh=ev([...v,...fb]),c=cmp(hh,vh)
+if(c>0)hw++;else if(c<0)vw++;else t++
+}
+let tt=hw+vw+t;return{h:hw/tt,v:vw/tt,t:t/tt,n:tt}
+}
+function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function cv(c){let r=c[0];return r==='A'?14:r==='K'?13:r==='Q'?12:r==='J'?11:r==='T'?10:+r}
+function ev(cards){
+let vals=cards.map(cv).sort((a,b)=>b-a),suits=cards.map(c=>c[1])
+let sc={};for(let s of suits)sc[s]=(sc[s]||0)+1
+let fs=null;for(let s in sc)if(sc[s]>=5){fs=s;break}
+let fc=fs?cards.filter(c=>c[1]===fs).map(cv).sort((a,b)=>b-a):null
+if(fc){let sh=str(fc);if(sh)return{r:8,k:[sh]}}
+let rc={};for(let v of vals)rc[v]=(rc[v]||0)+1
+let q=null;for(let i=14;i>=2;i--)if(rc[i]===4){q=i;break}
+if(q)return{r:7,k:[q,vals.find(v=>v!==q)]}
+let tr=[],pr=[];for(let i=14;i>=2;i--){if(rc[i]===3)tr.push(i);else if(rc[i]===2)pr.push(i)}
+if(tr.length&&(tr.length>1||pr.length))return{r:6,k:[tr[0],tr[1]||pr[0]]}
+if(fc)return{r:5,k:fc.slice(0,5)}
+let sh=str(vals);if(sh)return{r:4,k:[sh]}
+if(tr.length)return{r:3,k:[tr[0],...vals.filter(v=>v!==tr[0]).slice(0,2)]}
+if(pr.length>=2)return{r:2,k:[pr[0],pr[1],vals.find(v=>v!==pr[0]&&v!==pr[1])]}
+if(pr.length)return{r:1,k:[pr[0],...vals.filter(v=>v!==pr[0]).slice(0,3)]}
+return{r:0,k:vals.slice(0,5)}
+}
+function str(v){
+let u=[...new Set(v)].sort((a,b)=>b-a)
+for(let h=14;h>=5;h--){let f=true;for(let i=0;i<5;i++)if(!u.includes(h-i)){f=false;break}if(f)return h}
+if(u.includes(14)&&u.includes(5)&&u.includes(4)&&u.includes(3)&&u.includes(2))return 5
+return null
+}
+function cmp(a,b){if(a.r!==b.r)return a.r-b.r;for(let i=0;i<Math.min(a.k.length,b.k.length);i++)if(a.k[i]!==b.k[i])return a.k[i]-b.k[i];return 0}
+init()
+</script>
+</body>
+</html>
