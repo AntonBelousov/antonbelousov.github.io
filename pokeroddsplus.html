@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Texas Hold'em Poker Odds Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui;background:#1a1a2e;color:#eee;min-height:100vh;display:flex;flex-direction:column}
+.c{flex:1;display:flex;flex-direction:column;max-width:900px;margin:0 auto;padding:.5rem;width:100%}
+h1{text-align:center;font-size:1.3rem;margin:.5rem 0}
+.h{display:flex;gap:.5rem;flex-wrap:nowrap}
+.h.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;padding:8px 0;margin:-8px 0}
+.h.scroll::-webkit-scrollbar{display:none}
+@media(max-width:320px){.h{flex-wrap:wrap}}
+.s{flex:1;min-width:0;background:#16213e;border-radius:8px;padding:.5rem;text-align:center;position:relative}
+.s h2{font-size:.9rem;margin-bottom:.3rem}
+.del{position:absolute;top:-6px;left:-6px;width:20px;height:20px;background:#e94560;border:none;border-radius:50%;color:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+.del:hover{background:#ff6b6b}
+.add{flex:0 0 36px;background:#0f3460;border:2px dashed #444;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#888;cursor:pointer}
+.add:hover{border-color:#e94560;color:#e94560}
+.row{display:flex;justify-content:center;gap:.3rem;margin:.3rem 0}
+.cd{width:42px;height:60px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;cursor:pointer;border:2px solid transparent}
+.cd:hover{transform:scale(1.05)}
+.cd.e{background:#0f3460;border:2px dashed #444;color:#444}
+.cd.a{border-color:#e94560}
+.eq{font-size:1.1rem;font-weight:700;color:#e94560}
+.ti{color:#888;font-size:.8rem;display:none}
+.b{background:#16213e;border-radius:8px;padding:.5rem;margin:.5rem 0;text-align:center}
+.b h2{font-size:.9rem;margin-bottom:.3rem}
+.btns{display:none;gap:.5rem;justify-content:center;margin:.5rem 0}
+.btn{padding:.6rem 1.2rem;font-size:1rem;font-weight:700;background:#e94560;color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn:disabled{background:#555;cursor:not-allowed}
+.clr{padding:.6rem 1.2rem;font-size:.8rem;background:0;color:#888;border:1px solid #555;border-radius:6px;cursor:pointer}
+.p{background:#16213e;border-radius:8px;padding:.5rem;margin-top:.5rem}
+.pg{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;justify-content:center;width:fit-content;margin:0 auto}
+.pc{width:42px;height:60px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;cursor:pointer}
+.pc:hover:not(.u){transform:scale(1.1);z-index:1}
+.pc.u{opacity:.3;cursor:not-allowed}
+._h{color:#e94560}._d{color:#4a90d9}._c{color:#2ecc71}._s{color:#333}
+.sr{display:none;justify-content:center;gap:12px;margin-bottom:.5rem;flex-direction:row}
+.sb{width:50px;height:50px;background:#0f3460;border:2px solid #444;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer}
+.sb.sel{border-color:#e94560;background:#1a1a2e}
+.rg{display:none;grid-template-columns:repeat(5,1fr);gap:8px;width:fit-content;margin:0 auto}
+@media(max-width:600px){.pg{display:none}.sr{display:flex}.rg{display:grid}}
+@media(max-height:690px){h1,.b h2,.s h2{display:none}}
+</style>
+</head>
+<body>
+<div class="c">
+<h1>Texas Hold'em Poker Odds Calculator</h1>
+<div class="h" id="players">
+<div class="s"><h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div></div>
+</div>
+<div class="b"><h2>Board</h2><div class="row" id="bc"></div></div>
+<div class="btns"><button class="btn" id="calc" disabled>Calculate</button><button class="clr" id="clr">Clear</button></div>
+<div class="p"><div class="sr" id="sr"></div><div class="rg" id="rg"></div><div class="pg" id="pg"></div></div>
+</div>
+<script>
+const R='AKQJT98765432',S='shdc',SY={s:'\u2660',h:'\u2665',d:'\u2666',c:'\u2663'},SC={s:'_s',h:'_h',d:'_d',c:'_c'}
+const MIN_V=1,MAX_V=9,SCROLL_AT=4
+const NUM_WORKERS=navigator.hardwareConcurrency||4
+const TOTAL_ITER=1e5
+
+// Worker code as string
+const workerCode=`
+const R='AKQJT98765432',S='shdc'
+function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function cv(c){let r=c[0];return r==='A'?14:r==='K'?13:r==='Q'?12:r==='J'?11:r==='T'?10:+r}
+function ev(cards){
+let vals=cards.map(cv).sort((a,b)=>b-a),suits=cards.map(c=>c[1])
+let sc={};for(let s of suits)sc[s]=(sc[s]||0)+1
+let fs=null;for(let s in sc)if(sc[s]>=5){fs=s;break}
+let fc=fs?cards.filter(c=>c[1]===fs).map(cv).sort((a,b)=>b-a):null
+if(fc){let sh=str(fc);if(sh)return{r:8,k:[sh]}}
+let rc={};for(let v of vals)rc[v]=(rc[v]||0)+1
+let q=null;for(let i=14;i>=2;i--)if(rc[i]===4){q=i;break}
+if(q)return{r:7,k:[q,vals.find(v=>v!==q)]}
+let tr=[],pr=[];for(let i=14;i>=2;i--){if(rc[i]===3)tr.push(i);else if(rc[i]===2)pr.push(i)}
+if(tr.length&&(tr.length>1||pr.length))return{r:6,k:[tr[0],tr[1]||pr[0]]}
+if(fc)return{r:5,k:fc.slice(0,5)}
+let sh=str(vals);if(sh)return{r:4,k:[sh]}
+if(tr.length)return{r:3,k:[tr[0],...vals.filter(v=>v!==tr[0]).slice(0,2)]}
+if(pr.length>=2)return{r:2,k:[pr[0],pr[1],vals.find(v=>v!==pr[0]&&v!==pr[1])]}
+if(pr.length)return{r:1,k:[pr[0],...vals.filter(v=>v!==pr[0]).slice(0,3)]}
+return{r:0,k:vals.slice(0,5)}
+}
+function str(v){
+let u=[...new Set(v)].sort((a,b)=>b-a)
+for(let h=14;h>=5;h--){let f=true;for(let i=0;i<5;i++)if(!u.includes(h-i)){f=false;break}if(f)return h}
+if(u.includes(14)&&u.includes(5)&&u.includes(4)&&u.includes(3)&&u.includes(2))return 5
+return null
+}
+function cmp(a,b){if(a.r!==b.r)return a.r-b.r;for(let i=0;i<Math.min(a.k.length,b.k.length);i++)if(a.k[i]!==b.k[i])return a.k[i]-b.k[i];return 0}
+function mc(players,b,n){
+let dk=[]
+for(let s of S)for(let r of R)dk.push(r+s)
+let wins={},ties={}
+for(let p of players){wins[p.id]=0;ties[p.id]=0}
+let dead=[...b]
+for(let p of players)dead.push(...p.hand)
+let u=new Set(dead),av=dk.filter(c=>!u.has(c))
+for(let i=0;i<n;i++){
+let sh=shuf([...av]),fb=[...b,...sh.slice(0,5-b.length)]
+let hands=players.map(p=>({id:p.id,ev:ev([...p.hand,...fb])}))
+hands.sort((a,b)=>cmp(b.ev,a.ev))
+let best=hands[0].ev,winners=hands.filter(x=>cmp(x.ev,best)===0)
+if(winners.length===1)wins[winners[0].id]++
+else for(let w of winners)ties[w.id]++
+}
+return{wins,ties}
+}
+onmessage=function(e){
+let{players,board,iterations}=e.data
+let result=mc(players,board,iterations)
+postMessage(result)
+}
+`
+const workerBlob=new Blob([workerCode],{type:'application/javascript'})
+const workerUrl=URL.createObjectURL(workerBlob)
+let workers=[]
+for(let i=0;i<NUM_WORKERS;i++)workers.push(new Worker(workerUrl))
+let H=[null,null],V=[[null,null]],B=[null,null,null,null,null],A=null,CS='s'
+const $=s=>document.getElementById(s),q=s=>document.querySelectorAll(s)
+function init(){
+let g=$('pg');g.innerHTML=''
+for(let s of S)for(let r of R){let d=document.createElement('div');d.className='pc '+SC[s];d.dataset.c=r+s;d.textContent=r+SY[s];d.onclick=()=>sel(r+s);g.appendChild(d)}
+let sr=$('sr');sr.innerHTML=''
+for(let s of S){let b=document.createElement('div');b.className='sb '+SC[s]+(s===CS?' sel':'');b.textContent=SY[s];b.onclick=()=>{CS=s;updSel()};sr.appendChild(b)}
+renderPlayers()
+updSel()
+A='h_0';upd()
+}
+function renderPlayers(){
+let p=$('players');p.innerHTML=''
+// Toggle scroll mode when 4+ total players (hero + villains)
+let total=1+V.length
+let wasScroll=p.classList.contains('scroll')
+let nowScroll=total>=SCROLL_AT
+p.classList.toggle('scroll',nowScroll)
+// Calculate block width in scroll mode
+let sw=null
+if(nowScroll){
+let baseW=100,gap=8,addW=36+gap // add button width + gap before it
+let cw=$('players').parentElement.clientWidth
+let hasAdd=V.length<MAX_V
+let gaps=total*gap // gaps between all items including before add
+let contentW=total*baseW+gaps+(hasAdd?addW:0)
+// Only expand if there's empty space
+if(contentW<cw){
+let availForBlocks=cw-gaps-(hasAdd?addW:0)
+sw=Math.floor(availForBlocks/total)
+}else{
+sw=baseW
+}
+}
+// Player 1
+let hd=document.createElement('div');hd.className='s'
+if(sw)hd.style.flex='0 0 '+sw+'px'
+hd.innerHTML='<h2>Player 1</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
+p.appendChild(hd)
+// Players 2, 3, ...
+V.forEach((v,i)=>{
+let vd=document.createElement('div');vd.className='s'
+if(sw)vd.style.flex='0 0 '+sw+'px'
+let del=V.length>MIN_V?'<button class="del" data-v="'+i+'">×</button>':''
+vd.innerHTML=del+'<h2>Player '+(i+2)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
+p.appendChild(vd)
+})
+// Add button
+if(V.length<MAX_V){let ab=document.createElement('div');ab.className='add';ab.id='addv';ab.textContent='+';p.appendChild(ab);ab.onclick=addV}
+// Wire up cards
+$('hc').innerHTML='<div class="cd e" data-s="h_0">?</div><div class="cd e" data-s="h_1">?</div>'
+V.forEach((v,i)=>{$('v'+i+'c').innerHTML='<div class="cd e" data-s="v'+i+'_0">?</div><div class="cd e" data-s="v'+i+'_1">?</div>'})
+$('bc').innerHTML=[0,1,2,3,4].map(i=>'<div class="cd e" data-s="b_'+i+'">?</div>').join('')
+q('.cd').forEach(e=>e.onclick=()=>click(e.dataset.s))
+q('.del').forEach(e=>e.onclick=()=>delV(+e.dataset.v))
+// Auto-scroll to right when scroll mode is revealed
+if(!wasScroll&&nowScroll)setTimeout(()=>p.scrollLeft=p.scrollWidth,0)
+}
+function addV(){if(V.length<MAX_V){V.push([null,null]);renderPlayers();upd()}}
+function delV(i){if(V.length>MIN_V){V.splice(i,1);renderPlayers();A=next();upd()}}
+function updSel(){
+q('.sb').forEach(e=>e.classList.toggle('sel',e.textContent===SY[CS]))
+let rg=$('rg');rg.innerHTML=''
+for(let r of R){let d=document.createElement('div');d.className='pc '+SC[CS];d.dataset.c=r+CS;d.textContent=r+SY[CS];d.onclick=()=>sel(r+CS);rg.appendChild(d)}
+upd()
+}
+function used(){return[...H,...V.flat(),...B].filter(c=>c)}
+function upd(){
+H.forEach((c,i)=>render('h_'+i,c));V.forEach((v,vi)=>v.forEach((c,i)=>render('v'+vi+'_'+i,c)));B.forEach((c,i)=>render('b_'+i,c))
+q('.cd').forEach(e=>e.classList.toggle('a',e.dataset.s===A))
+let u=new Set(used());q('.pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)));q('#rg .pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)))
+let hf=H.every(c=>c),anyVf=V.some(v=>v.every(c=>c)),bf=B.filter(c=>c).length,bok=bf===0||bf>=3
+let ok=hf&&anyVf&&bok
+$('calc').disabled=!ok
+if(ok)calc();else resetEq()
+}
+function resetEq(){
+$('he').textContent='--%';$('ht').style.display='none'
+V.forEach((v,i)=>{$('v'+i+'e').textContent='--%';$('v'+i+'t').style.display='none'})
+}
+function render(s,c){
+let e=document.querySelector('[data-s="'+s+'"]');if(!e)return
+if(c){e.className='cd '+SC[c[1]];e.textContent=c[0]+SY[c[1]]}
+else{e.className='cd e';e.textContent='?'}
+}
+function sel(c){
+if(!A)A=next();if(!A||used().includes(c))return
+let p=A.split('_')
+if(p[0]==='h')H[+p[1]]=c
+else if(p[0][0]==='v'){let vi=+p[0].slice(1);V[vi][+p[1]]=c}
+else if(p[0]==='b')B[+p[1]]=c
+A=next(A);upd()
+}
+function next(cur){
+for(let i=0;i<2;i++)if(!H[i])return'h_'+i
+for(let vi=0;vi<V.length;vi++)for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i
+// If current is a villain, stay in that villain
+if(cur&&cur[0]==='v'){let vi=+cur.split('_')[0].slice(1);for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i}
+for(let i=0;i<5;i++)if(!B[i])return'b_'+i
+return null
+}
+function click(s){
+let p=s.split('_')
+if(p[0]==='h'&&H[+p[1]])H[+p[1]]=null
+else if(p[0][0]==='v'){let vi=+p[0].slice(1);if(V[vi]&&V[vi][+p[1]])V[vi][+p[1]]=null}
+else if(p[0]==='b'&&B[+p[1]])B[+p[1]]=null
+A=s;upd()
+}
+$('clr').onclick=()=>{H=[null,null];V=V.map(()=>[null,null]);B=[null,null,null,null,null];A='h_0';resetEq();upd()}
+$('calc').onclick=calc
+let calcPending=false
+function calc(){
+if(calcPending)return
+calcPending=true
+setTimeout(()=>{
+let b=B.filter(c=>c)
+// Build generic player list with neutral IDs (p0, p1, p2, ...)
+let players=[{id:'p0',hand:H}]
+V.forEach((v,i)=>{if(v.every(c=>c))players.push({id:'p'+(i+1),hand:v})})
+if(players.length<2){calcPending=false;return}
+let t0=performance.now()
+let iterPerWorker=Math.floor(TOTAL_ITER/NUM_WORKERS)
+let completed=0
+let totalWins={},totalTies={}
+for(let p of players){totalWins[p.id]=0;totalTies[p.id]=0}
+workers.forEach((w,i)=>{
+w.onmessage=function(e){
+let{wins,ties}=e.data
+for(let id in wins){totalWins[id]+=wins[id];totalTies[id]+=ties[id]}
+completed++
+if(completed===NUM_WORKERS){
+let totalN=iterPerWorker*NUM_WORKERS
+let r={}
+for(let p of players)r[p.id]={w:totalWins[p.id]/totalN,t:totalTies[p.id]/totalN}
+console.log('MC time:',(performance.now()-t0).toFixed(1)+'ms ('+NUM_WORKERS+' workers)')
+// Map results back to UI elements
+$('he').textContent=(r.p0.w*100).toFixed(1)+'%'
+if(r.p0.t>0.001){$('ht').style.display='block';$('ht').textContent='Tie: '+(r.p0.t*100).toFixed(1)+'%'}else{$('ht').style.display='none'}
+V.forEach((v,i)=>{
+let vf=v.every(c=>c)
+let pid='p'+(i+1)
+$('v'+i+'e').textContent=vf&&r[pid]?(r[pid].w*100).toFixed(1)+'%':'--%'
+if(vf&&r[pid]&&r[pid].t>0.001){$('v'+i+'t').style.display='block';$('v'+i+'t').textContent='Tie: '+(r[pid].t*100).toFixed(1)+'%'}else{$('v'+i+'t').style.display='none'}
+})
+calcPending=false
+}
+}
+w.postMessage({players,board:b,iterations:iterPerWorker})
+})
+},10)
+}
+function mc(players,b,n=1e5){
+let dk=[]
+for(let s of S)for(let r of R)dk.push(r+s)
+let wins={},ties={}
+for(let p of players){wins[p.id]=0;ties[p.id]=0}
+let dead=[...b]
+for(let p of players)dead.push(...p.hand)
+let u=new Set(dead),av=dk.filter(c=>!u.has(c))
+for(let i=0;i<n;i++){
+let sh=shuf([...av]),fb=[...b,...sh.slice(0,5-b.length)]
+let hands=players.map(p=>({id:p.id,ev:ev([...p.hand,...fb])}))
+hands.sort((a,b)=>cmp(b.ev,a.ev))
+let best=hands[0].ev,winners=hands.filter(x=>cmp(x.ev,best)===0)
+if(winners.length===1)wins[winners[0].id]++
+else for(let w of winners)ties[w.id]++
+}
+let res={}
+for(let p of players)res[p.id]={w:wins[p.id]/n,t:ties[p.id]/n}
+return res
+}
+function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function cv(c){let r=c[0];return r==='A'?14:r==='K'?13:r==='Q'?12:r==='J'?11:r==='T'?10:+r}
+function ev(cards){
+let vals=cards.map(cv).sort((a,b)=>b-a),suits=cards.map(c=>c[1])
+let sc={};for(let s of suits)sc[s]=(sc[s]||0)+1
+let fs=null;for(let s in sc)if(sc[s]>=5){fs=s;break}
+let fc=fs?cards.filter(c=>c[1]===fs).map(cv).sort((a,b)=>b-a):null
+if(fc){let sh=str(fc);if(sh)return{r:8,k:[sh]}}
+let rc={};for(let v of vals)rc[v]=(rc[v]||0)+1
+let q=null;for(let i=14;i>=2;i--)if(rc[i]===4){q=i;break}
+if(q)return{r:7,k:[q,vals.find(v=>v!==q)]}
+let tr=[],pr=[];for(let i=14;i>=2;i--){if(rc[i]===3)tr.push(i);else if(rc[i]===2)pr.push(i)}
+if(tr.length&&(tr.length>1||pr.length))return{r:6,k:[tr[0],tr[1]||pr[0]]}
+if(fc)return{r:5,k:fc.slice(0,5)}
+let sh=str(vals);if(sh)return{r:4,k:[sh]}
+if(tr.length)return{r:3,k:[tr[0],...vals.filter(v=>v!==tr[0]).slice(0,2)]}
+if(pr.length>=2)return{r:2,k:[pr[0],pr[1],vals.find(v=>v!==pr[0]&&v!==pr[1])]}
+if(pr.length)return{r:1,k:[pr[0],...vals.filter(v=>v!==pr[0]).slice(0,3)]}
+return{r:0,k:vals.slice(0,5)}
+}
+function str(v){
+let u=[...new Set(v)].sort((a,b)=>b-a)
+for(let h=14;h>=5;h--){let f=true;for(let i=0;i<5;i++)if(!u.includes(h-i)){f=false;break}if(f)return h}
+if(u.includes(14)&&u.includes(5)&&u.includes(4)&&u.includes(3)&&u.includes(2))return 5
+return null
+}
+function cmp(a,b){if(a.r!==b.r)return a.r-b.r;for(let i=0;i<Math.min(a.k.length,b.k.length);i++)if(a.k[i]!==b.k[i])return a.k[i]-b.k[i];return 0}
+init()
+</script>
+</body>
+</html>
