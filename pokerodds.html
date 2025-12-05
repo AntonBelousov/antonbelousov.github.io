@@ -93,17 +93,17 @@ sw=Math.floor(availForBlocks/total)
 sw=baseW
 }
 }
-// Hero
+// Player 1
 let hd=document.createElement('div');hd.className='s'
 if(sw)hd.style.flex='0 0 '+sw+'px'
-hd.innerHTML='<h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
+hd.innerHTML='<h2>Player 1</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
 p.appendChild(hd)
-// Villains
+// Players 2, 3, ...
 V.forEach((v,i)=>{
 let vd=document.createElement('div');vd.className='s'
 if(sw)vd.style.flex='0 0 '+sw+'px'
 let del=V.length>MIN_V?'<button class="del" data-v="'+i+'">×</button>':''
-vd.innerHTML=del+'<h2>Villain '+(i+1)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
+vd.innerHTML=del+'<h2>Player '+(i+2)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
 p.appendChild(vd)
 })
 // Add button
@@ -172,16 +172,19 @@ $('calc').onclick=calc
 function calc(){
 setTimeout(()=>{
 let b=B.filter(c=>c)
-let players=[{id:'h',hand:H}]
-V.forEach((v,i)=>{if(v.every(c=>c))players.push({id:'v'+i,hand:v})})
+// Build generic player list with neutral IDs (p0, p1, p2, ...)
+let players=[{id:'p0',hand:H}]
+V.forEach((v,i)=>{if(v.every(c=>c))players.push({id:'p'+(i+1),hand:v})})
 if(players.length<2)return
 let r=mc(players,b)
-$('he').textContent=(r.h.w*100).toFixed(1)+'%'
-if(r.h.t>0.001){$('ht').style.display='block';$('ht').textContent='Tie: '+(r.h.t*100).toFixed(1)+'%'}else{$('ht').style.display='none'}
+// Map results back to UI elements (p0 -> hero, p1 -> v0, p2 -> v1, etc.)
+$('he').textContent=(r.p0.w*100).toFixed(1)+'%'
+if(r.p0.t>0.001){$('ht').style.display='block';$('ht').textContent='Tie: '+(r.p0.t*100).toFixed(1)+'%'}else{$('ht').style.display='none'}
 V.forEach((v,i)=>{
 let vf=v.every(c=>c)
-$('v'+i+'e').textContent=vf&&r['v'+i]?(r['v'+i].w*100).toFixed(1)+'%':'--%'
-if(vf&&r['v'+i]&&r['v'+i].t>0.001){$('v'+i+'t').style.display='block';$('v'+i+'t').textContent='Tie: '+(r['v'+i].t*100).toFixed(1)+'%'}else{$('v'+i+'t').style.display='none'}
+let pid='p'+(i+1)
+$('v'+i+'e').textContent=vf&&r[pid]?(r[pid].w*100).toFixed(1)+'%':'--%'
+if(vf&&r[pid]&&r[pid].t>0.001){$('v'+i+'t').style.display='block';$('v'+i+'t').textContent='Tie: '+(r[pid].t*100).toFixed(1)+'%'}else{$('v'+i+'t').style.display='none'}
 })
 },10)
 }
