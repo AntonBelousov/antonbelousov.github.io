@@ -48,276 +48,569 @@ h1{text-align:center;font-size:1.3rem;margin:.5rem 0}
 </head>
 <body>
 <div class="c">
-<h1>Texas Hold'em Poker Odds Calculator</h1>
-<div class="h" id="players">
-<div class="s"><h2>Hero</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div></div>
+  <h1>Texas Hold'em Poker Odds Calculator</h1>
+  <div class="h" id="players">
+    <div class="s">
+      <h2>Hero</h2>
+      <div class="row" id="hc"></div>
+      <div class="eq" id="he">--%</div>
+      <div class="ti" id="ht">Tie: --%</div>
+    </div>
+  </div>
+  <div class="b">
+    <h2>Board</h2>
+    <div class="row" id="bc"></div>
+  </div>
+  <div class="btns">
+    <button class="btn" id="calc" disabled>Calculate</button>
+    <button class="clr" id="clr">Clear</button>
+  </div>
+  <div class="p">
+    <div class="sr" id="sr"></div>
+    <div class="rg" id="rg"></div>
+    <div class="pg" id="pg"></div>
+  </div>
 </div>
-<div class="b"><h2>Board</h2><div class="row" id="bc"></div></div>
-<div class="btns"><button class="btn" id="calc" disabled>Calculate</button><button class="clr" id="clr">Clear</button></div>
-<div class="p"><div class="sr" id="sr"></div><div class="rg" id="rg"></div><div class="pg" id="pg"></div></div>
-</div>
+
 <script>
 const R='AKQJT98765432',S='shdc',SY={s:'\u2660',h:'\u2665',d:'\u2666',c:'\u2663'},SC={s:'_s',h:'_h',d:'_d',c:'_c'}
 const MIN_V=1,MAX_V=9,SCROLL_AT=4
 const NUM_WORKERS=navigator.hardwareConcurrency||4
 const TOTAL_ITER=1e5
 
-// Worker code as string
-const workerCode=`
-const R='AKQJT98765432',S='shdc'
-function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function cv(c){let r=c[0];return r==='A'?14:r==='K'?13:r==='Q'?12:r==='J'?11:r==='T'?10:+r}
-function ev(cards){
-let vals=cards.map(cv).sort((a,b)=>b-a),suits=cards.map(c=>c[1])
-let sc={};for(let s of suits)sc[s]=(sc[s]||0)+1
-let fs=null;for(let s in sc)if(sc[s]>=5){fs=s;break}
-let fc=fs?cards.filter(c=>c[1]===fs).map(cv).sort((a,b)=>b-a):null
-if(fc){let sh=str(fc);if(sh)return{r:8,k:[sh]}}
-let rc={};for(let v of vals)rc[v]=(rc[v]||0)+1
-let q=null;for(let i=14;i>=2;i--)if(rc[i]===4){q=i;break}
-if(q)return{r:7,k:[q,vals.find(v=>v!==q)]}
-let tr=[],pr=[];for(let i=14;i>=2;i--){if(rc[i]===3)tr.push(i);else if(rc[i]===2)pr.push(i)}
-if(tr.length&&(tr.length>1||pr.length))return{r:6,k:[tr[0],tr[1]||pr[0]]}
-if(fc)return{r:5,k:fc.slice(0,5)}
-let sh=str(vals);if(sh)return{r:4,k:[sh]}
-if(tr.length)return{r:3,k:[tr[0],...vals.filter(v=>v!==tr[0]).slice(0,2)]}
-if(pr.length>=2)return{r:2,k:[pr[0],pr[1],vals.find(v=>v!==pr[0]&&v!==pr[1])]}
-if(pr.length)return{r:1,k:[pr[0],...vals.filter(v=>v!==pr[0]).slice(0,3)]}
-return{r:0,k:vals.slice(0,5)}
+// ======= Optimized worker code with bitmask evaluator =======
+const workerCode = `
+const R = 'AKQJT98765432';
+const S = 'shdc';
+
+// Precomputed full deck
+const DECK = [];
+for (let s of S) {
+  for (let r of R) {
+    DECK.push(r + s);
+  }
 }
-function str(v){
-let u=[...new Set(v)].sort((a,b)=>b-a)
-for(let h=14;h>=5;h--){let f=true;for(let i=0;i<5;i++)if(!u.includes(h-i)){f=false;break}if(f)return h}
-if(u.includes(14)&&u.includes(5)&&u.includes(4)&&u.includes(3)&&u.includes(2))return 5
-return null
+
+// Suit index
+const SUIT_INDEX = { s: 0, h: 1, d: 2, c: 3 };
+
+// ===== PRNG (LCG) =====
+
+let seed = 1;
+
+function rand32() {
+  seed = (1664525 * seed + 1013904223) >>> 0;
+  return seed;
 }
-function cmp(a,b){if(a.r!==b.r)return a.r-b.r;for(let i=0;i<Math.min(a.k.length,b.k.length);i++)if(a.k[i]!==b.k[i])return a.k[i]-b.k[i];return 0}
-function mc(players,b,n){
-let dk=[]
-for(let s of S)for(let r of R)dk.push(r+s)
-let wins={},ties={}
-for(let p of players){wins[p.id]=0;ties[p.id]=0}
-let dead=[...b]
-for(let p of players)dead.push(...p.hand)
-let u=new Set(dead),av=dk.filter(c=>!u.has(c))
-for(let i=0;i<n;i++){
-let sh=shuf([...av]),fb=[...b,...sh.slice(0,5-b.length)]
-let hands=players.map(p=>({id:p.id,ev:ev([...p.hand,...fb])}))
-hands.sort((a,b)=>cmp(b.ev,a.ev))
-let best=hands[0].ev,winners=hands.filter(x=>cmp(x.ev,best)===0)
-if(winners.length===1)wins[winners[0].id]++
-else for(let w of winners)ties[w.id]++
+
+function randInt(n) {
+  return rand32() % n; // 0 <= result < n
 }
-return{wins,ties}
+
+// Rank char -> numeric rank
+function rankValue(rc) {
+  return rc === 'A' ? 14 :
+         rc === 'K' ? 13 :
+         rc === 'Q' ? 12 :
+         rc === 'J' ? 11 :
+         rc === 'T' ? 10 : (rc.charCodeAt(0) - 48); // '2'..'9'
 }
-onmessage=function(e){
-let{players,board,iterations}=e.data
-let result=mc(players,board,iterations)
-postMessage(result)
+
+// Find highest straight (or straight flush) in bitmask
+// mask: 13 bits, bit 0 -> rank 2, bit 12 -> rank 14 (A)
+function straightHigh(mask) {
+  // High straights: 6..A
+  for (let hi = 12; hi >= 4; hi--) {
+    const window = (mask >> (hi - 4)) & 0x1F; // 5 bits
+    if (window === 0x1F) {
+      return hi + 2; // hi index -> rank
+    }
+  }
+  // Wheel A2345
+  const wheelMask = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3); // 2,3,4,5
+  if ((mask & wheelMask) === wheelMask && (mask & (1 << 12))) {
+    return 5;
+  }
+  return 0;
 }
-`
+
+// Hand evaluator using rank counts + bitmasks
+function ev(cards) {
+  // cards: array of 7 strings "As", "Kd", ...
+  const rankCount = new Uint8Array(15); // indexes 2..14 used
+  const suitCount = new Uint8Array(4);
+  const suitMask  = new Uint16Array(4); // 13 bits (2..14)
+  let ranksMask = 0;
+
+  // Collect counts and masks
+  for (let i = 0; i < cards.length; i++) {
+    const c = cards[i];
+    const r = rankValue(c[0]);   // 2..14
+    const sIdx = SUIT_INDEX[c[1]];
+    rankCount[r]++;
+    suitCount[sIdx]++;
+    const bit = 1 << (r - 2);
+    suitMask[sIdx] |= bit;
+    ranksMask |= bit;
+  }
+
+  // Flush detection
+  let flushSuit = -1;
+  for (let si = 0; si < 4; si++) {
+    if (suitCount[si] >= 5) {
+      flushSuit = si;
+      break;
+    }
+  }
+
+  // Straight flush
+  if (flushSuit >= 0) {
+    const fh = straightHigh(suitMask[flushSuit]);
+    if (fh) {
+      return { r: 8, k: [fh] }; // straight flush
+    }
+  }
+
+  // Four of a kind
+  for (let r = 14; r >= 2; r--) {
+    if (rankCount[r] === 4) {
+      let kicker = 0;
+      for (let k = 14; k >= 2; k--) {
+        if (k !== r && rankCount[k] > 0) {
+          kicker = k;
+          break;
+        }
+      }
+      return { r: 7, k: [r, kicker] };
+    }
+  }
+
+  // Trips and pairs
+  const trips = [];
+  const pairs = [];
+  for (let r = 14; r >= 2; r--) {
+    if (rankCount[r] === 3) {
+      trips.push(r);
+    } else if (rankCount[r] === 2) {
+      pairs.push(r);
+    }
+  }
+
+  // Full house
+  if (trips.length > 0 && (trips.length > 1 || pairs.length > 0)) {
+    const t1 = trips[0];
+    const t2 = (trips.length > 1) ? trips[1] : pairs[0];
+    return { r: 6, k: [t1, t2] };
+  }
+
+  // Flush
+  if (flushSuit >= 0) {
+    const mask = suitMask[flushSuit];
+    const cardsRanks = [];
+    for (let r = 14; r >= 2; r--) {
+      if (mask & (1 << (r - 2))) {
+        cardsRanks.push(r);
+        if (cardsRanks.length === 5) break;
+      }
+    }
+    return { r: 5, k: cardsRanks };
+  }
+
+  // Straight
+  const sh = straightHigh(ranksMask);
+  if (sh) {
+    return { r: 4, k: [sh] };
+  }
+
+  // Trips
+  if (trips.length > 0) {
+    const t = trips[0];
+    const kickers = [];
+    for (let r = 14; r >= 2; r--) {
+      if (r !== t && rankCount[r] > 0) {
+        kickers.push(r);
+        if (kickers.length === 2) break;
+      }
+    }
+    return { r: 3, k: [t, kickers[0], kickers[1]] };
+  }
+
+  // Two pair
+  if (pairs.length >= 2) {
+    const p1 = pairs[0];
+    const p2 = pairs[1];
+    let kicker = 0;
+    for (let r = 14; r >= 2; r--) {
+      if (r !== p1 && r !== p2 && rankCount[r] > 0) {
+        kicker = r;
+        break;
+      }
+    }
+    return { r: 2, k: [p1, p2, kicker] };
+  }
+
+  // One pair
+  if (pairs.length === 1) {
+    const p = pairs[0];
+    const kickers = [];
+    for (let r = 14; r >= 2; r--) {
+      if (r !== p && rankCount[r] > 0) {
+        kickers.push(r);
+        if (kickers.length === 3) break;
+      }
+    }
+    return { r: 1, k: [p, kickers[0], kickers[1], kickers[2]] };
+  }
+
+  // High card
+  const highs = [];
+  for (let r = 14; r >= 2; r--) {
+    if (rankCount[r] > 0) {
+      highs.push(r);
+      if (highs.length === 5) break;
+    }
+  }
+  return { r: 0, k: highs };
+}
+
+function cmp(a, b) {
+  if (a.r !== b.r) return a.r - b.r;
+  const len = a.k.length < b.k.length ? a.k.length : b.k.length;
+  for (let i = 0; i < len; i++) {
+    if (a.k[i] !== b.k[i]) return a.k[i] - b.k[i];
+  }
+  return 0;
+}
+
+// ===== Monte Carlo core, minimized allocations =====
+
+function mc(players, board, n) {
+  const wins = {};
+  const ties = {};
+
+  for (const p of players) {
+    wins[p.id] = 0;
+    ties[p.id] = 0;
+  }
+
+  // Dead cards: board + all hole cards
+  const dead = new Set(board);
+  for (const p of players) {
+    dead.add(p.hand[0]);
+    dead.add(p.hand[1]);
+  }
+
+  // Remaining deck
+  const remaining = [];
+  for (const c of DECK) {
+    if (!dead.has(c)) remaining.push(c);
+  }
+  const remLen = remaining.length;
+
+  const fixedCount = board.length;
+  const need = 5 - fixedCount;
+
+  // Board buffer (5 cards)
+  const fb = new Array(5);
+  for (let i = 0; i < fixedCount; i++) {
+    fb[i] = board[i];
+  }
+
+  // 7-card hand buffer
+  const tmp7 = new Array(7);
+
+  for (let iter = 0; iter < n; iter++) {
+    // Partial Fisher–Yates: shuffle only first 'need' cards
+    for (let i = 0; i < need; i++) {
+      const j = i + randInt(remLen - i);
+      const t = remaining[i];
+      remaining[i] = remaining[j];
+      remaining[j] = t;
+      fb[fixedCount + i] = remaining[i];
+    }
+
+    let bestVal = null;
+    let winnerIds = [];
+
+    // Evaluate all players in one pass
+    for (let pi = 0; pi < players.length; pi++) {
+      const ph = players[pi].hand;
+      tmp7[0] = ph[0];
+      tmp7[1] = ph[1];
+      tmp7[2] = fb[0];
+      tmp7[3] = fb[1];
+      tmp7[4] = fb[2];
+      tmp7[5] = fb[3];
+      tmp7[6] = fb[4];
+
+      const val = ev(tmp7);
+
+      if (bestVal === null) {
+        bestVal = val;
+        winnerIds.length = 0;
+        winnerIds.push(players[pi].id);
+      } else {
+        const c = cmp(val, bestVal);
+        if (c > 0) {
+          bestVal = val;
+          winnerIds.length = 0;
+          winnerIds.push(players[pi].id);
+        } else if (c === 0) {
+          winnerIds.push(players[pi].id);
+        }
+      }
+    }
+
+    if (winnerIds.length === 1) {
+      wins[winnerIds[0]]++;
+    } else {
+      for (let i = 0; i < winnerIds.length; i++) {
+        ties[winnerIds[i]]++;
+      }
+    }
+  }
+
+  return { wins, ties };
+}
+
+onmessage = function(e) {
+  const { players, board, iterations } = e.data;
+  // Seed PRNG per worker run
+  seed = (Date.now() ^ iterations ^ players.length) >>> 0;
+  const result = mc(players, board, iterations);
+  postMessage(result);
+};
+`;
+
+// Create workers from the optimized code
 const workerBlob=new Blob([workerCode],{type:'application/javascript'})
 const workerUrl=URL.createObjectURL(workerBlob)
 let workers=[]
 for(let i=0;i<NUM_WORKERS;i++)workers.push(new Worker(workerUrl))
+
+// ===== Main thread state =====
 let H=[null,null],V=[[null,null]],B=[null,null,null,null,null],A=null,CS='s'
 const $=s=>document.getElementById(s),q=s=>document.querySelectorAll(s)
+
 function init(){
-let g=$('pg');g.innerHTML=''
-for(let s of S)for(let r of R){let d=document.createElement('div');d.className='pc '+SC[s];d.dataset.c=r+s;d.textContent=r+SY[s];d.onclick=()=>sel(r+s);g.appendChild(d)}
-let sr=$('sr');sr.innerHTML=''
-for(let s of S){let b=document.createElement('div');b.className='sb '+SC[s]+(s===CS?' sel':'');b.textContent=SY[s];b.onclick=()=>{CS=s;updSel()};sr.appendChild(b)}
-renderPlayers()
-updSel()
-A='h_0';upd()
+  let g=$('pg');g.innerHTML=''
+  for(let s of S)for(let r of R){
+    let d=document.createElement('div')
+    d.className='pc '+SC[s]
+    d.dataset.c=r+s
+    d.textContent=r+SY[s]
+    d.onclick=()=>sel(r+s)
+    g.appendChild(d)
+  }
+
+  let sr=$('sr');sr.innerHTML=''
+  for(let s of S){
+    let b=document.createElement('div')
+    b.className='sb '+SC[s]+(s===CS?' sel':'')
+    b.textContent=SY[s]
+    b.onclick=()=>{CS=s;updSel()}
+    sr.appendChild(b)
+  }
+
+  renderPlayers()
+  updSel()
+  A='h_0'
+  upd()
 }
+
 function renderPlayers(){
-let p=$('players');p.innerHTML=''
-// Toggle scroll mode when 4+ total players (hero + villains)
-let total=1+V.length
-let wasScroll=p.classList.contains('scroll')
-let nowScroll=total>=SCROLL_AT
-p.classList.toggle('scroll',nowScroll)
-// Calculate block width in scroll mode
-let sw=null
-if(nowScroll){
-let baseW=100,gap=8,addW=36+gap // add button width + gap before it
-let cw=$('players').parentElement.clientWidth
-let hasAdd=V.length<MAX_V
-let gaps=total*gap // gaps between all items including before add
-let contentW=total*baseW+gaps+(hasAdd?addW:0)
-// Only expand if there's empty space
-if(contentW<cw){
-let availForBlocks=cw-gaps-(hasAdd?addW:0)
-sw=Math.floor(availForBlocks/total)
-}else{
-sw=baseW
+  let p=$('players');p.innerHTML=''
+  let total=1+V.length
+  let wasScroll=p.classList.contains('scroll')
+  let nowScroll=total>=SCROLL_AT
+  p.classList.toggle('scroll',nowScroll)
+
+  let sw=null
+  if(nowScroll){
+    let baseW=100,gap=8,addW=36+gap
+    let cw=$('players').parentElement.clientWidth
+    let hasAdd=V.length<MAX_V
+    let gaps=total*gap
+    let contentW=total*baseW+gaps+(hasAdd?addW:0)
+    if(contentW<cw){
+      let availForBlocks=cw-gaps-(hasAdd?addW:0)
+      sw=Math.floor(availForBlocks/total)
+    }else{
+      sw=baseW
+    }
+  }
+
+  let hd=document.createElement('div')
+  hd.className='s'
+  if(sw)hd.style.flex='0 0 '+sw+'px'
+  hd.innerHTML='<h2>Player 1</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
+  p.appendChild(hd)
+
+  V.forEach((v,i)=>{
+    let vd=document.createElement('div')
+    vd.className='s'
+    if(sw)vd.style.flex='0 0 '+sw+'px'
+    let del=V.length>MIN_V?'<button class="del" data-v="'+i+'">×</button>':''
+    vd.innerHTML=del+'<h2>Player '+(i+2)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
+    p.appendChild(vd)
+  })
+
+  if(V.length<MAX_V){
+    let ab=document.createElement('div')
+    ab.className='add'
+    ab.id='addv'
+    ab.textContent='+'
+    p.appendChild(ab)
+    ab.onclick=addV
+  }
+
+  $('hc').innerHTML='<div class="cd e" data-s="h_0">?</div><div class="cd e" data-s="h_1">?</div>'
+  V.forEach((v,i)=>{
+    $('v'+i+'c').innerHTML='<div class="cd e" data-s="v'+i+'_0">?</div><div class="cd e" data-s="v'+i+'_1">?</div>'
+  })
+  $('bc').innerHTML=[0,1,2,3,4].map(i=>'<div class="cd e" data-s="b_'+i+'">?</div>').join('')
+  q('.cd').forEach(e=>e.onclick=()=>click(e.dataset.s))
+  q('.del').forEach(e=>e.onclick=()=>delV(+e.dataset.v))
+
+  if(!wasScroll&&nowScroll)setTimeout(()=>p.scrollLeft=p.scrollWidth,0)
 }
-}
-// Player 1
-let hd=document.createElement('div');hd.className='s'
-if(sw)hd.style.flex='0 0 '+sw+'px'
-hd.innerHTML='<h2>Player 1</h2><div class="row" id="hc"></div><div class="eq" id="he">--%</div><div class="ti" id="ht">Tie: --%</div>'
-p.appendChild(hd)
-// Players 2, 3, ...
-V.forEach((v,i)=>{
-let vd=document.createElement('div');vd.className='s'
-if(sw)vd.style.flex='0 0 '+sw+'px'
-let del=V.length>MIN_V?'<button class="del" data-v="'+i+'">×</button>':''
-vd.innerHTML=del+'<h2>Player '+(i+2)+'</h2><div class="row" id="v'+i+'c"></div><div class="eq" id="v'+i+'e">--%</div><div class="ti" id="v'+i+'t">Tie: --%</div>'
-p.appendChild(vd)
-})
-// Add button
-if(V.length<MAX_V){let ab=document.createElement('div');ab.className='add';ab.id='addv';ab.textContent='+';p.appendChild(ab);ab.onclick=addV}
-// Wire up cards
-$('hc').innerHTML='<div class="cd e" data-s="h_0">?</div><div class="cd e" data-s="h_1">?</div>'
-V.forEach((v,i)=>{$('v'+i+'c').innerHTML='<div class="cd e" data-s="v'+i+'_0">?</div><div class="cd e" data-s="v'+i+'_1">?</div>'})
-$('bc').innerHTML=[0,1,2,3,4].map(i=>'<div class="cd e" data-s="b_'+i+'">?</div>').join('')
-q('.cd').forEach(e=>e.onclick=()=>click(e.dataset.s))
-q('.del').forEach(e=>e.onclick=()=>delV(+e.dataset.v))
-// Auto-scroll to right when scroll mode is revealed
-if(!wasScroll&&nowScroll)setTimeout(()=>p.scrollLeft=p.scrollWidth,0)
-}
+
 function addV(){if(V.length<MAX_V){V.push([null,null]);renderPlayers();upd()}}
 function delV(i){if(V.length>MIN_V){V.splice(i,1);renderPlayers();A=next();upd()}}
+
 function updSel(){
-q('.sb').forEach(e=>e.classList.toggle('sel',e.textContent===SY[CS]))
-let rg=$('rg');rg.innerHTML=''
-for(let r of R){let d=document.createElement('div');d.className='pc '+SC[CS];d.dataset.c=r+CS;d.textContent=r+SY[CS];d.onclick=()=>sel(r+CS);rg.appendChild(d)}
-upd()
+  q('.sb').forEach(e=>e.classList.toggle('sel',e.textContent===SY[CS]))
+  let rg=$('rg');rg.innerHTML=''
+  for(let r of R){
+    let d=document.createElement('div')
+    d.className='pc '+SC[CS]
+    d.dataset.c=r+CS
+    d.textContent=r+SY[CS]
+    d.onclick=()=>sel(r+CS)
+    rg.appendChild(d)
+  }
+  upd()
 }
+
 function used(){return[...H,...V.flat(),...B].filter(c=>c)}
+
 function upd(){
-H.forEach((c,i)=>render('h_'+i,c));V.forEach((v,vi)=>v.forEach((c,i)=>render('v'+vi+'_'+i,c)));B.forEach((c,i)=>render('b_'+i,c))
-q('.cd').forEach(e=>e.classList.toggle('a',e.dataset.s===A))
-let u=new Set(used());q('.pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)));q('#rg .pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)))
-let hf=H.every(c=>c),anyVf=V.some(v=>v.every(c=>c)),bf=B.filter(c=>c).length,bok=bf===0||bf>=3
-let ok=hf&&anyVf&&bok
-$('calc').disabled=!ok
-if(ok)calc();else resetEq()
+  H.forEach((c,i)=>render('h_'+i,c))
+  V.forEach((v,vi)=>v.forEach((c,i)=>render('v'+vi+'_'+i,c)))
+  B.forEach((c,i)=>render('b_'+i,c))
+  q('.cd').forEach(e=>e.classList.toggle('a',e.dataset.s===A))
+  let u=new Set(used())
+  q('.pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)))
+  q('#rg .pc').forEach(e=>e.classList.toggle('u',u.has(e.dataset.c)))
+  let hf=H.every(c=>c)
+  let anyVf=V.some(v=>v.every(c=>c))
+  let bf=B.filter(c=>c).length
+  let bok=bf===0||bf>=3
+  let ok=hf&&anyVf&&bok
+  $('calc').disabled=!ok
+  if(ok)calc();else resetEq()
 }
+
 function resetEq(){
-$('he').textContent='--%';$('ht').style.display='none'
-V.forEach((v,i)=>{$('v'+i+'e').textContent='--%';$('v'+i+'t').style.display='none'})
+  $('he').textContent='--%';$('ht').style.display='none'
+  V.forEach((v,i)=>{$('v'+i+'e').textContent='--%';$('v'+i+'t').style.display='none'})
 }
+
 function render(s,c){
-let e=document.querySelector('[data-s="'+s+'"]');if(!e)return
-if(c){e.className='cd '+SC[c[1]];e.textContent=c[0]+SY[c[1]]}
-else{e.className='cd e';e.textContent='?'}
+  let e=document.querySelector('[data-s="'+s+'"]');if(!e)return
+  if(c){e.className='cd '+SC[c[1]];e.textContent=c[0]+SY[c[1]]}
+  else{e.className='cd e';e.textContent='?'}
 }
+
 function sel(c){
-if(!A)A=next();if(!A||used().includes(c))return
-let p=A.split('_')
-if(p[0]==='h')H[+p[1]]=c
-else if(p[0][0]==='v'){let vi=+p[0].slice(1);V[vi][+p[1]]=c}
-else if(p[0]==='b')B[+p[1]]=c
-A=next(A);upd()
+  if(!A)A=next();if(!A||used().includes(c))return
+  let p=A.split('_')
+  if(p[0]==='h')H[+p[1]]=c
+  else if(p[0][0]==='v'){
+    let vi=+p[0].slice(1);V[vi][+p[1]]=c
+  }
+  else if(p[0]==='b')B[+p[1]]=c
+  A=next(A);upd()
 }
+
 function next(cur){
-for(let i=0;i<2;i++)if(!H[i])return'h_'+i
-for(let vi=0;vi<V.length;vi++)for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i
-// If current is a villain, stay in that villain
-if(cur&&cur[0]==='v'){let vi=+cur.split('_')[0].slice(1);for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i}
-for(let i=0;i<5;i++)if(!B[i])return'b_'+i
-return null
+  for(let i=0;i<2;i++)if(!H[i])return'h_'+i
+  for(let vi=0;vi<V.length;vi++)for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i
+  if(cur&&cur[0]==='v'){
+    let vi=+cur.split('_')[0].slice(1)
+    for(let i=0;i<2;i++)if(!V[vi][i])return'v'+vi+'_'+i
+  }
+  for(let i=0;i<5;i++)if(!B[i])return'b_'+i
+  return null
 }
+
 function click(s){
-let p=s.split('_')
-if(p[0]==='h'&&H[+p[1]])H[+p[1]]=null
-else if(p[0][0]==='v'){let vi=+p[0].slice(1);if(V[vi]&&V[vi][+p[1]])V[vi][+p[1]]=null}
-else if(p[0]==='b'&&B[+p[1]])B[+p[1]]=null
-A=s;upd()
+  let p=s.split('_')
+  if(p[0]==='h'&&H[+p[1]])H[+p[1]]=null
+  else if(p[0][0]==='v'){
+    let vi=+p[0].slice(1)
+    if(V[vi]&&V[vi][+p[1]])V[vi][+p[1]]=null
+  }
+  else if(p[0]==='b'&&B[+p[1]])B[+p[1]]=null
+  A=s;upd()
 }
+
 $('clr').onclick=()=>{H=[null,null];V=V.map(()=>[null,null]);B=[null,null,null,null,null];A='h_0';resetEq();upd()}
 $('calc').onclick=calc
+
 let calcPending=false
+
 function calc(){
-if(calcPending)return
-calcPending=true
-setTimeout(()=>{
-let b=B.filter(c=>c)
-// Build generic player list with neutral IDs (p0, p1, p2, ...)
-let players=[{id:'p0',hand:H}]
-V.forEach((v,i)=>{if(v.every(c=>c))players.push({id:'p'+(i+1),hand:v})})
-if(players.length<2){calcPending=false;return}
-let t0=performance.now()
-let iterPerWorker=Math.floor(TOTAL_ITER/NUM_WORKERS)
-let completed=0
-let totalWins={},totalTies={}
-for(let p of players){totalWins[p.id]=0;totalTies[p.id]=0}
-workers.forEach((w,i)=>{
-w.onmessage=function(e){
-let{wins,ties}=e.data
-for(let id in wins){totalWins[id]+=wins[id];totalTies[id]+=ties[id]}
-completed++
-if(completed===NUM_WORKERS){
-let totalN=iterPerWorker*NUM_WORKERS
-let r={}
-for(let p of players)r[p.id]={w:totalWins[p.id]/totalN,t:totalTies[p.id]/totalN}
-console.log('MC time:',(performance.now()-t0).toFixed(1)+'ms ('+NUM_WORKERS+' workers)')
-// Map results back to UI elements
-$('he').textContent=(r.p0.w*100).toFixed(1)+'%'
-if(r.p0.t>0.001){$('ht').style.display='block';$('ht').textContent='Tie: '+(r.p0.t*100).toFixed(1)+'%'}else{$('ht').style.display='none'}
-V.forEach((v,i)=>{
-let vf=v.every(c=>c)
-let pid='p'+(i+1)
-$('v'+i+'e').textContent=vf&&r[pid]?(r[pid].w*100).toFixed(1)+'%':'--%'
-if(vf&&r[pid]&&r[pid].t>0.001){$('v'+i+'t').style.display='block';$('v'+i+'t').textContent='Tie: '+(r[pid].t*100).toFixed(1)+'%'}else{$('v'+i+'t').style.display='none'}
-})
-calcPending=false
+  if(calcPending)return
+  calcPending=true
+  setTimeout(()=>{
+    let b=B.filter(c=>c)
+    let players=[{id:'p0',hand:H}]
+    V.forEach((v,i)=>{if(v.every(c=>c))players.push({id:'p'+(i+1),hand:v})})
+    if(players.length<2){calcPending=false;return}
+    let t0=performance.now()
+    let iterPerWorker=Math.floor(TOTAL_ITER/NUM_WORKERS)
+    let completed=0
+    let totalWins={},totalTies={}
+    for(let p of players){totalWins[p.id]=0;totalTies[p.id]=0}
+    workers.forEach((w,i)=>{
+      w.onmessage=function(e){
+        let{wins,ties}=e.data
+        for(let id in wins){totalWins[id]+=wins[id];totalTies[id]+=ties[id]}
+        completed++
+        if(completed===NUM_WORKERS){
+          let totalN=iterPerWorker*NUM_WORKERS
+          let r={}
+          for(let p of players)r[p.id]={w:totalWins[p.id]/totalN,t:totalTies[p.id]/totalN}
+          console.log('MC time:',(performance.now()-t0).toFixed(1)+'ms ('+NUM_WORKERS+' workers)')
+          $('he').textContent=(r.p0.w*100).toFixed(1)+'%'
+          if(r.p0.t>0.001){
+            $('ht').style.display='block'
+            $('ht').textContent='Tie: '+(r.p0.t*100).toFixed(1)+'%'
+          }else{
+            $('ht').style.display='none'
+          }
+          V.forEach((v,i)=>{
+            let vf=v.every(c=>c)
+            let pid='p'+(i+1)
+            $('v'+i+'e').textContent=vf&&r[pid]?(r[pid].w*100).toFixed(1)+'%':'--%'
+            if(vf&&r[pid]&&r[pid].t>0.001){
+              $('v'+i+'t').style.display='block'
+              $('v'+i+'t').textContent='Tie: '+(r[pid].t*100).toFixed(1)+'%'
+            }else{
+              $('v'+i+'t').style.display='none'
+            }
+          })
+          calcPending=false
+        }
+      }
+      w.postMessage({players,board:b,iterations:iterPerWorker})
+    })
+  },10)
 }
-}
-w.postMessage({players,board:b,iterations:iterPerWorker})
-})
-},10)
-}
-function mc(players,b,n=1e5){
-let dk=[]
-for(let s of S)for(let r of R)dk.push(r+s)
-let wins={},ties={}
-for(let p of players){wins[p.id]=0;ties[p.id]=0}
-let dead=[...b]
-for(let p of players)dead.push(...p.hand)
-let u=new Set(dead),av=dk.filter(c=>!u.has(c))
-for(let i=0;i<n;i++){
-let sh=shuf([...av]),fb=[...b,...sh.slice(0,5-b.length)]
-let hands=players.map(p=>({id:p.id,ev:ev([...p.hand,...fb])}))
-hands.sort((a,b)=>cmp(b.ev,a.ev))
-let best=hands[0].ev,winners=hands.filter(x=>cmp(x.ev,best)===0)
-if(winners.length===1)wins[winners[0].id]++
-else for(let w of winners)ties[w.id]++
-}
-let res={}
-for(let p of players)res[p.id]={w:wins[p.id]/n,t:ties[p.id]/n}
-return res
-}
-function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function cv(c){let r=c[0];return r==='A'?14:r==='K'?13:r==='Q'?12:r==='J'?11:r==='T'?10:+r}
-function ev(cards){
-let vals=cards.map(cv).sort((a,b)=>b-a),suits=cards.map(c=>c[1])
-let sc={};for(let s of suits)sc[s]=(sc[s]||0)+1
-let fs=null;for(let s in sc)if(sc[s]>=5){fs=s;break}
-let fc=fs?cards.filter(c=>c[1]===fs).map(cv).sort((a,b)=>b-a):null
-if(fc){let sh=str(fc);if(sh)return{r:8,k:[sh]}}
-let rc={};for(let v of vals)rc[v]=(rc[v]||0)+1
-let q=null;for(let i=14;i>=2;i--)if(rc[i]===4){q=i;break}
-if(q)return{r:7,k:[q,vals.find(v=>v!==q)]}
-let tr=[],pr=[];for(let i=14;i>=2;i--){if(rc[i]===3)tr.push(i);else if(rc[i]===2)pr.push(i)}
-if(tr.length&&(tr.length>1||pr.length))return{r:6,k:[tr[0],tr[1]||pr[0]]}
-if(fc)return{r:5,k:fc.slice(0,5)}
-let sh=str(vals);if(sh)return{r:4,k:[sh]}
-if(tr.length)return{r:3,k:[tr[0],...vals.filter(v=>v!==tr[0]).slice(0,2)]}
-if(pr.length>=2)return{r:2,k:[pr[0],pr[1],vals.find(v=>v!==pr[0]&&v!==pr[1])]}
-if(pr.length)return{r:1,k:[pr[0],...vals.filter(v=>v!==pr[0]).slice(0,3)]}
-return{r:0,k:vals.slice(0,5)}
-}
-function str(v){
-let u=[...new Set(v)].sort((a,b)=>b-a)
-for(let h=14;h>=5;h--){let f=true;for(let i=0;i<5;i++)if(!u.includes(h-i)){f=false;break}if(f)return h}
-if(u.includes(14)&&u.includes(5)&&u.includes(4)&&u.includes(3)&&u.includes(2))return 5
-return null
-}
-function cmp(a,b){if(a.r!==b.r)return a.r-b.r;for(let i=0;i<Math.min(a.k.length,b.k.length);i++)if(a.k[i]!==b.k[i])return a.k[i]-b.k[i];return 0}
+
+// (Фоллбек single-thread оставить как есть или можно выкинуть — он не нужен в нормальных браузерах)
+
 init()
 </script>
 </body>
